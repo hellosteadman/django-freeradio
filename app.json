@@ -1,0 +1,75 @@
+{
+    "name": "Django Free Radio",
+    "description": "A Django project to power an Internet community radio station",
+    "repository": "https://github.com/iamsteadman/django-freeradio",
+    "keywords": ["django", "python"],
+    "image": "heroku/python",
+    "addons": [
+        {
+            "plan": "heroku-postgresql"
+        },
+        {
+            "plan": "heroku-redis"
+        },
+        {
+            "plan": "heroku-scheduler"
+        }
+    ],
+    "env": {
+        "SECRET_KEY": {
+            "description": "A secret key for verifying the integrity of signed cookies.",
+            "generator": "secret"
+        },
+        "SENTRY_DSN": {
+            "description": "Sentry DSN URL"
+        },
+        "REDIS_URL": {
+            "description": "Redis URL"
+        },
+        "AWS_ACCESS_KEY_ID": {
+            "description": "AWS access key ID"
+        },
+        "AWS_SECRET_ACCESS_KEY": {
+            "description": "AWS secret key"
+        },
+        "AWS_STORAGE_BUCKET_NAME": {
+            "description": "AWS storage bucket name"
+        },
+        "S3DIRECT_REGION": {
+            "description": "AWS S3 region"
+        },
+        "AWS_S3_CUSTOM_DOMAIN": {
+            "description": "AWS S3 domain",
+            "value": "s3-eu-west-1.amazonaws.com"
+        },
+        "SITE_ID": {
+            "description": "Django Site ID",
+            "value": "1"
+        },
+        "RADIO_STREAM_URL": {
+            "description": "Shoutcast stream URL"
+        },
+        "RADIO_NOWPLAYING_URL": {
+            "description": "Now-playing XML URL"
+        },
+        "MIXCLOUD_USERNAME": {
+            "description": "MixCloud username"
+        },
+        "GOOGLE_ANALYTICS_ID": {
+            "description": "Google Analytics ID"
+        },
+        "FACEBOOK_APP_ID": {
+            "description": "Facebook app ID"
+        }
+    },
+    "formation": {
+        "web": {
+            "quantity": 1,
+            "size": "free"
+        },
+        "worker": {
+            "quantity": 1,
+            "size": "free"
+        }
+    }
+}
