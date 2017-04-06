@@ -17,10 +17,6 @@
             "description": "A secret key for verifying the integrity of signed cookies.",
             "generator": "secret"
         },
-        "SENTRY_DSN": {
-            "description": "Sentry DSN URL",
-            "value": ""
-        },
         "AWS_ACCESS_KEY_ID": {
             "description": "AWS access key ID"
         },
