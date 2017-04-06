@@ -6,7 +6,9 @@ contextlib2==0.5.4
 dj-database-url==0.4.2
 Django==1.11
 django-ckeditor==5.2.1
+django-constance==2.0.0
 django-markdown-deux==1.0.5
+django-picklefield==0.3.2
 django-redis-cache==1.7.1
 django-rq==0.9.5
 django-s3direct==0.4.9
@@ -19,6 +21,9 @@ markdown2==2.3.3
 olefile==0.44
 Pillow==4.1.0
 psycopg2==2.7.1
+py==1.4.33
+pytest==3.0.7
+pytest-django==3.1.2
 python-dateutil==2.6.0
 python-oembed==0.2.4
 pytz==2017.2
