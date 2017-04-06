@@ -1,5 +1,6 @@
 from __future__ import absolute_import
 from django import forms
+from suit_redactor.widgets import RedactorWidget
 from .models import Programme
 
 
@@ -64,3 +65,7 @@ class ProgrammeForm(forms.ModelForm):
             'banner',
             'logo'
         )
+
+        widgets = {
+            'description': RedactorWidget
+        }
