@@ -21,22 +21,35 @@
             "description": "Django settings module",
             "value": "freeradio.settings"
         },
+        "DROPBOX_OAUTH2_TOKEN": {
+            "DropBox OAuth 2 token",
+            "required": false
+        },
+        "DROPBOX_ROOT_PATH": {
+            "DropBox root path",
+            "required": false
+        },
         "AWS_ACCESS_KEY_ID": {
-            "description": "AWS access key ID"
+            "description": "AWS access key ID",
+            "required": false
         },
         "AWS_SECRET_ACCESS_KEY": {
-            "description": "AWS secret key"
+            "description": "AWS secret key",
+            "required": false
         },
         "AWS_STORAGE_BUCKET_NAME": {
-            "description": "AWS storage bucket name"
+            "description": "AWS storage bucket name",
+            "required": false
         },
         "S3DIRECT_REGION": {
             "description": "AWS S3 region",
-            "value": "eu-west-1"
+            "value": "eu-west-1",
+            "required": false
         },
         "AWS_S3_CUSTOM_DOMAIN": {
             "description": "AWS S3 domain",
-            "value": "s3-eu-west-1.amazonaws.com"
+            "value": "s3-eu-west-1.amazonaws.com",
+            "required": false
         },
         "SITE_ID": {
             "description": "Django Site ID",

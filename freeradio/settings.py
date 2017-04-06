@@ -1,6 +1,7 @@
 import environ
 import dj_database_url
 
+from django.core.exceptions import ImproperlyConfigured
 from django.core.urlresolvers import reverse
 from django.utils import six
 
@@ -141,9 +142,31 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.AppDirectoriesFinder'
 )
 
-if not DEBUG:
+if (
+    env('DROPBOX_OAUTH2_TOKEN', default='') and
+    env('DROPBOX_ROOT_PATH', default='')
+):
+    DEFAULT_FILE_STORAGE = 'storages.backends.dropbox.DropboxStorage'
+    STATICFILES_STORAGE = 'freeradio.core.dropbox.DropboxStaticStorage'
+    DROPBOX_OAUTH2_TOKEN = env('DROPBOX_OAUTH2_TOKEN', default='')
+    DROPBOX_ROOT_PATH = env('DROPBOX_ROOT_PATH', default='')
+elif env('AWS_S3_BUCKET', default=''):
     DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
     STATICFILES_STORAGE = 'freeradio.core.storages.S3StaticStorage'
+    S3DIRECT_REGION = 'eu-west-1'
+    AWS_ACCESS_KEY_ID = env('AWS_ACCESS_KEY_ID', default='')
+    AWS_SECRET_ACCESS_KEY = env('AWS_SECRET_ACCESS_KEY', default='')
+    AWS_STORAGE_BUCKET_NAME = env('AWS_S3_BUCKET', default='')
+    AWS_S3_CUSTOM_DOMAIN = env('AWS_S3_CUSTOM_DOMAIN', default='') or (
+        's3-eu-west-1.amazonaws.com/%s' % AWS_STORAGE_BUCKET_NAME
+    )
+
+    AWS_PRELOAD_METADATA = True
+    AWS_QUERYSTRING_AUTH = False
+elif not DEBUG:
+    raise ImproperlyConfigured(
+        'Either a DROPBOX_OAUTH2_TOKEN or AWS_S3_BUCKET must be defined.'
+    )
 
 REDIS_URL = env('REDIS_URL', default='redis://127.0.0.1:6379/')
 REDIS_URL_PARTS = urlparse(REDIS_URL)
@@ -153,17 +176,6 @@ RQ_QUEUES = {
         'URL': REDIS_URL
     }
 }
-
-S3DIRECT_REGION = 'eu-west-1'
-AWS_ACCESS_KEY_ID = env('AWS_ACCESS_KEY_ID', default='')
-AWS_SECRET_ACCESS_KEY = env('AWS_SECRET_ACCESS_KEY', default='')
-AWS_STORAGE_BUCKET_NAME = env('AWS_S3_BUCKET', default='')
-AWS_S3_CUSTOM_DOMAIN = env('AWS_S3_CUSTOM_DOMAIN', default='') or (
-    's3-eu-west-1.amazonaws.com/%s' % AWS_STORAGE_BUCKET_NAME
-)
-
-AWS_PRELOAD_METADATA = True
-AWS_QUERYSTRING_AUTH = False
 
 MEDIA_ROOT = BASE_DIR.path('media')
 STATIC_ROOT = BASE_DIR.path('staticfiles')
