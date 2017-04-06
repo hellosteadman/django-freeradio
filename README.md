@@ -17,8 +17,8 @@ store static files and user-uploaded media
 
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/iamsteadman/django-freeradio)
 
-Setup
------
+Setup locally
+-------------
 
 Settings are managed using `django-environ`. Create your `.env` file based on
 the proposed `env.example` file. Most importantly, set the following variables.
