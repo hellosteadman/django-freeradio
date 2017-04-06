@@ -1,5 +1,6 @@
 from django.contrib import admin
 from .models import *
+from .forms import *
 
 
 @admin.register(Artist)
@@ -10,6 +11,7 @@ class ArtistAdmin(admin.ModelAdmin):
 @admin.register(Track)
 class TrackAdmin(admin.ModelAdmin):
     list_display = ('title', 'artist')
+    form = TrackForm
 
 
 class PlaylistTrackInline(admin.TabularInline):
