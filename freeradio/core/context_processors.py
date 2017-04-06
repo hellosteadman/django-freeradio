@@ -17,7 +17,8 @@ def settings(request):
         'HOME_TITLE': config.HOME_TITLE,
         'HOME_INTRO': config.HOME_INTRO,
         'IOS_APP_URL': config.IOS_APP_URL,
-        'ANDROID_APP_URL': config.ANDROID_APP_URL
+        'ANDROID_APP_URL': config.ANDROID_APP_URL,
+        'MAILCHIMP_FORM_URL': config.MAILCHIMP_FORM_URL
     }
 
 

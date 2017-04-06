@@ -396,11 +396,11 @@ CONSTANCE_CONFIG = {
         'Home intro text'
     ),
     'IOS_APP_URL': (
-        '',
+        'https://itunes.apple.com/gb/app/brum-radio/id1218461799?mt=8',
         'iOS app URL'
     ),
     'ANDROID_APP_URL': (
-        '',
+        'https://play.google.com/store/apps/details?id=com.ionicframework.combrumradio701094',
         'Android app URL'
     ),
     'RADIO_STREAM_URL': (
@@ -428,5 +428,12 @@ CONSTANCE_CONFIG = {
     'MIXCLOUD_USERNAME': (
         env('MIXCLOUD_USERNAME', default='brumradio'),
         'MixCloud username'
+    ),
+    'MAILCHIMP_FORM_URL': (
+        env(
+            'MAILCHIMP_FORM_URL',
+            default='//freeradio.us5.list-manage.com/subscribe/post?u=ff5d7e986a83ed1a1e1de6c27&amp;id=19d2b7f483'
+        ),
+        'MailChimp subscription form URL'
     )
 }
