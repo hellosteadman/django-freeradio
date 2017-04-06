@@ -16,6 +16,7 @@ django-rq==0.9.5
 django-s3direct==0.4.9
 django-storages==1.5.2
 django-suit==0.2.25
+django-suit-redactor==0.0.4
 django-taggit==0.22.0
 feedparser==5.2.1
 gunicorn==19.7.1
