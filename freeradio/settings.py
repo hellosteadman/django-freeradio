@@ -404,11 +404,17 @@ CONSTANCE_CONFIG = {
         'Android app URL'
     ),
     'RADIO_STREAM_URL': (
-        env('RADIO_STREAM_URL', default=''),
+        env(
+            'RADIO_STREAM_URL',
+            default='http://uk3.internet-radio.com:11168/stream'
+        ),
         'Shoutcast stream URL'
     ),
     'RADIO_NOWPLAYING_URL': (
-        env('RADIO_NOWPLAYING_URL', default=''),
+        env(
+            'RADIO_NOWPLAYING_URL',
+            default='https://control.internet-radio.com:2199/external/rpc.php?m=streaminfo.get&username=brumradio&charset=&mountpoint=&rid=brumradio'
+        ),
         'Now-playing XML URL'
     ),
     'GOOGLE_ANALYTICS_ID': (
@@ -420,7 +426,7 @@ CONSTANCE_CONFIG = {
         'Facebook app ID'
     ),
     'MIXCLOUD_USERNAME': (
-        env('MIXCLOUD_USERNAME', default=''),
+        env('MIXCLOUD_USERNAME', default='brumradio'),
         'MixCloud username'
     )
 }
