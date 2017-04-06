@@ -1,6 +1,5 @@
 from django.db import models
 from django.core.cache import cache
-from ckeditor.fields import RichTextField
 from .helpers import upload_presenter_photo
 
 
@@ -23,7 +22,7 @@ class Presenter(models.Model):
         blank=True
     )
 
-    bio = RichTextField(null=True, blank=True)
+    biography = models.TextField(null=True, blank=True)
     alumnus = models.BooleanField(default=False)
     twitter_username = models.CharField(max_length=30, null=True, blank=True)
     facebook_username = models.CharField(max_length=50, null=True, blank=True)
