@@ -3,7 +3,6 @@ from django.db import models
 from django.template.defaultfilters import slugify
 from django.utils.safestring import mark_safe
 from django.utils.html import escape
-from ckeditor_uploader.fields import RichTextUploadingField
 import feedparser
 
 
@@ -137,7 +136,7 @@ class Episode(models.Model):
     url = models.URLField(u'player URL', max_length=255)
     guid = models.CharField(max_length=255, unique=True)
     published = models.DateTimeField(null=True, blank=True)
-    description = RichTextUploadingField(null=True, blank=True)
+    description = models.TextField(null=True, blank=True)
 
     def __str__(self):
         return self.title
