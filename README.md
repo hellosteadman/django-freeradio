@@ -24,7 +24,5 @@ Settings are managed using `django-environ`. Create your `.env` file based on
 the proposed `env.example` file. Most importantly, set the following variables.
 For example:
 
-    DATABASE_URL="postgres://freeradio:freeradio@localhost:5432/freeradio"
-    DJANGO_SETTINGS_MODULE="config.settings.local"
     DJANGO_SECRET_KEY="your-secret-key"
     DJANGO_DEBUG=True
