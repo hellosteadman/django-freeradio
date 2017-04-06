@@ -19,7 +19,6 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'collectfast',
     'django.contrib.sites',
     'django.contrib.staticfiles',
     's3direct',
@@ -195,14 +194,8 @@ CACHES = {
             'PICKLE_VERSION': -1
         },
         'KEY_PREFIX': 'cache'
-    },
-    'collectfast': {
-        'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
-        'LOCATION': 'collectfast'
     }
 }
-
-COLLECTFAST_CACHE = 'collectfast'
 
 NOTICEBOARD_MODELS = (
     (
