@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.utils import timezone
 from .models import *
+from .forms import *
 
 
 class SeriesPresenterInline(admin.TabularInline):
@@ -24,6 +25,8 @@ class SeriesAdmin(admin.ModelAdmin):
         SeriesPresenterInline,
         SubscriptionLinkInline
     ]
+
+    form = SeriesForm
 
     fieldsets = (
         (

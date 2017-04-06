@@ -1,4 +1,3 @@
-from ckeditor.fields import RichTextField
 from django.conf import settings
 from django.core.cache import cache
 from django.db import models
@@ -37,7 +36,7 @@ class Track(models.Model):
         blank=True
     )
 
-    notes = RichTextField(null=True, blank=True)
+    notes = models.TextField(null=True, blank=True)
     sample_url = models.URLField(
         u'sample URL',
         max_length=255,
