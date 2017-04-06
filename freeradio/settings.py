@@ -437,19 +437,19 @@ CONSTANCE_CONFIG = {
         'Android app URL'
     ),
     'RADIO_STREAM_URL': (
-        os.getenv('RADIO_STREAM_URL'),
+        os.getenv('RADIO_STREAM_URL', ''),
         'Shoutcast stream URL'
     ),
     'RADIO_NOWPLAYING_URL': (
-        os.getenv('RADIO_NOWPLAYING_URL'),
+        os.getenv('RADIO_NOWPLAYING_URL', ''),
         'Now-playing XML URL'
     ),
     'GOOGLE_ANALYTICS_ID': (
-        os.getenv('GOOGLE_ANALYTICS_ID'),
+        os.getenv('GOOGLE_ANALYTICS_ID', ''),
         'Google Analytics ID'
     ),
     'FACEBOOK_APP_ID': (
-        os.getenv('FACEBOOK_APP_ID'),
+        os.getenv('FACEBOOK_APP_ID', ''),
         'Facebook app ID'
     )
 }
