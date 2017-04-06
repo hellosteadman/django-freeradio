@@ -341,48 +341,6 @@ THUMBNAIL_REDIS_PASSWORD = REDIS_URL_PARTS.password
 THUMBNAIL_REDIS_HOST = REDIS_URL_PARTS.hostname
 THUMBNAIL_REDIS_PORT = REDIS_URL_PARTS.port
 
-OEMBED_ENDPOINTS = (
-    (
-        (
-            'http://flickr.com/photos/*',
-            'https://flickr.com/photos/*'
-        ),
-        'https://www.flickr.com/services/oembed/'
-    ),
-    (
-        (
-            'http://vimeo\.com/*',
-            'https://vimeo\.com/*'
-        ),
-        'https://www.vimeo.com/api/oembed.json'
-    ),
-    (
-        (
-            'http://youtube.com/*',
-            'https://youtube.com/*',
-            'http://www.youtube.com/*',
-            'https://www.youtube.com/*'
-        ),
-        'https://www.youtube.com/oembed'
-    ),
-    (
-        (
-            'http://www.mixcloud.com/*',
-            'https://www.mixcloud.com/*'
-        ),
-        'https://www.mixcloud.com/oembed/'
-    ),
-    (
-        (
-            'http://www.soundcloud.com/*',
-            'https://www.soundcloud.com/*',
-            'http://soundcloud.com/*',
-            'https://soundcloud.com/*',
-        ),
-        'https://soundcloud.com/oembed?maxheight=81'
-    )
-)
-
 NOTICEBOARD_SIZES = {
     'blog.post': {
         768: [2, 2]
