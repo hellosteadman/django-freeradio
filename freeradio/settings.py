@@ -18,6 +18,8 @@ SECRET_KEY = env('DJANGO_SECRET_KEY')
 DEBUG = env.bool('DJANGO_DEBUG', False)
 ALLOWED_HOSTS = ['*']
 INSTALLED_APPS = [
+    'suit',
+    'suit_redactor',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -31,8 +33,6 @@ INSTALLED_APPS = [
     'markdown_deux',
     'django_rq',
     'taggit',
-    'ckeditor',
-    'ckeditor_uploader',
     'constance',
     'constance.backends.database',
     'freeradio.core',
