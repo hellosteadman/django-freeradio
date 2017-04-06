@@ -17,7 +17,7 @@ class Series(models.Model):
     slug = models.SlugField(max_length=30, unique=True)
     subtitle = models.CharField(max_length=200, null=True, blank=True)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
     class Meta:
@@ -115,7 +115,7 @@ class Programme(models.Model):
 
     objects = ProgrammeManager()
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name or self.get_presenters_display()
 
     @models.permalink
@@ -442,7 +442,7 @@ class ProgrammePresenter(models.Model):
 
     order = models.PositiveIntegerField(default=0)
 
-    def __unicode__(self):
+    def __str__(self):
         return u'%s - %s' % (self.programme.name, self.presenter.name)
 
     class Meta:
@@ -456,7 +456,7 @@ class ProgrammeHiatus(models.Model):
     date = models.DateField()
     notes = models.TextField(null=True, blank=True)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.date.strftime('%d/%m/%Y')
 
     class Meta:
@@ -488,7 +488,7 @@ class Update(models.Model):
         )
     )
 
-    def __unicode__(self):
+    def __str__(self):
         return self.title or self.date.strftime('%Y-%m-%d')
 
     def render_media(self):
@@ -519,7 +519,7 @@ class MixcloudSearch(models.Model):
 
     criteria = models.CharField(max_length=100)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.criteria
 
     class Meta:
@@ -539,7 +539,7 @@ class LookaheadItem(models.Model):
     programme = models.ForeignKey(Programme, related_name='lookaheads')
     details = models.TextField()
 
-    def __unicode__(self):
+    def __str__(self):
         return self.programme.name
 
     class Meta:

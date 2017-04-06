@@ -69,7 +69,7 @@ class Notice(models.Model):
                 self._blocks = model[media_size]
             else:
                 self._blocks = model.get(
-                    model.keys()[-1],
+                    tuple(model.keys())[-1],
                     [1, 1]
                 )
 

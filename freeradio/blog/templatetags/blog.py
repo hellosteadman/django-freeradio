@@ -11,9 +11,9 @@ register = Library()
 
 @register.filter
 def avatar(user, size=150):
-    if isinstance(user, (str, unicode, SafeText)) and '@' in user:
+    if isinstance(user, (str, SafeText)) and '@' in user:
         return '//www.gravatar.com/avatar/%s?s=%s' % (
-            md5(user).hexdigest(), size
+            md5(user.encode('utf-8')).hexdigest(), size
         )
 
     if isinstance(user, User):
@@ -45,7 +45,7 @@ def avatar(user, size=150):
 
     if getattr(user, 'email', None):
         return '//www.gravatar.com/avatar/%s?s=%s' % (
-            md5(user.email).hexdigest(), size
+            md5(user.email.encode('utf-8')).hexdigest(), size
         )
 
     initials = ''.join(
