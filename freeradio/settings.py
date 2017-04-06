@@ -344,7 +344,6 @@ THUMBNAIL_REDIS_PASSWORD = REDIS_URL_PARTS.password
 THUMBNAIL_REDIS_HOST = REDIS_URL_PARTS.hostname
 THUMBNAIL_REDIS_PORT = REDIS_URL_PARTS.port
 
-MIXCLOUD_USERNAME = os.getenv('MIXCLOUD_USERNAME')
 OEMBED_ENDPOINTS = (
     (
         (
@@ -451,5 +450,9 @@ CONSTANCE_CONFIG = {
     'FACEBOOK_APP_ID': (
         os.getenv('FACEBOOK_APP_ID', ''),
         'Facebook app ID'
+    ),
+    'MIXCLOUD_USERNAME': (
+        os.getenv('MIXCLOUD_USERNAME', ''),
+        'MixCloud username'
     )
 }
