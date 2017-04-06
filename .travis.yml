@@ -1,0 +1,28 @@
+sudo: false
+language: python
+python:
+- '3.6'
+env:
+  global:
+  - PIP_RETRIES=10
+  - PIP_TIMEOUT=30
+  matrix:
+  - TOXENV=qa
+  - TOXENV=test
+matrix:
+  allow_failures:
+  - env: TOXENV=qa
+install:
+- travis_retry pip install -U pip
+- travis_retry pip install tox
+- travis_retry pip freeze
+script:
+- tox -r
+- test -d .tox/$TOXENV/log && cat .tox/$TOXENV/log/*.log || true
+after_success:
+- travis_retry pip install codecov
+- codecov
+cache:
+  directories:
+  - .tox/$TOXENV
+  - $HOME/.cache/pip

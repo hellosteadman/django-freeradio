@@ -1,0 +1,6 @@
+flake8
+flake8-debugger
+flake8-docstrings
+flake8-import-order
+mccabe
+pep8-naming
