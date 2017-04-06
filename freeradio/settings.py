@@ -151,11 +151,15 @@ RQ_QUEUES = {
     }
 }
 
+S3DIRECT_REGION = os.getenv('S3DIRECT_REGION', 'eu-west-1')
 AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
 AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
 AWS_STORAGE_BUCKET_NAME = os.getenv('AWS_S3_BUCKET')
 AWS_S3_CUSTOM_DOMAIN = os.getenv('AWS_S3_CUSTOM_DOMAIN') or (
-    's3-eu-west-1.amazonaws.com/%s' % AWS_STORAGE_BUCKET_NAME
+    's3-%s.amazonaws.com/%s' % (
+        S3DIRECT_REGION,
+        AWS_STORAGE_BUCKET_NAME
+    )
 )
 
 AWS_PRELOAD_METADATA = True
@@ -166,7 +170,6 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 MEDIA_URL = DEBUG and '/media/' or '//%s/uploads/' % AWS_S3_CUSTOM_DOMAIN
 STATIC_URL = DEBUG and '/static/' or ('//%s/static/' % AWS_S3_CUSTOM_DOMAIN)
 SITE_ID = os.getenv('SITE_ID')
-S3DIRECT_REGION = 'eu-west-1'
 
 S3DIRECT_DESTINATIONS = {
     'podcast_episodes': {
