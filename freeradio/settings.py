@@ -30,6 +30,7 @@ INSTALLED_APPS = [
     'ckeditor',
     'ckeditor_uploader',
     'constance',
+    'constance.backends.database',
     'freeradio.core',
     'freeradio.advertising',
     'freeradio.talent',
