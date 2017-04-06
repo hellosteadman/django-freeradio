@@ -9,7 +9,6 @@ from django.utils import timezone
 from django.utils.http import urlquote
 from django.utils.text import slugify, mark_safe
 from hashlib import md5
-from oembed import OEmbedConsumer, OEmbedEndpoint
 from .helpers import upload_presenter_photo, calculate_next_air_dates
 from .managers import ProgrammeManager
 
@@ -498,25 +497,11 @@ class Update(models.Model):
         rendered = cache.get(cachekey)
 
         if not rendered:
-            if 'www.mixcloud.com' in self.url:
-                rendered = (
-                    '<iframe width="100%%" height="60" '
-                    'src="https://www.mixcloud.com/widget/iframe/?feed=%s'
-                    '&hide_cover=1&mini=1&light=1" frameborder="0"></iframe>'
-                ) % urlquote(self.url)
-            else:
-                consumer = OEmbedConsumer()
-                for regexes, endpoint in settings.OEMBED_ENDPOINTS:
-                    consumer.addEndpoint(
-                        OEmbedEndpoint(endpoint, regexes)
-                    )
-
-                try:
-                    response = consumer.embed(self.url)
-                except:
-                    rendered = u''
-                else:
-                    rendered = response['html']
+            rendered = (
+                '<iframe width="100%%" height="60" '
+                'src="https://www.mixcloud.com/widget/iframe/?feed=%s'
+                '&hide_cover=1&mini=1&light=1" frameborder="0"></iframe>'
+            ) % urlquote(self.url)
 
             cache.set(cachekey, rendered, 60 * 60 * 24)
 

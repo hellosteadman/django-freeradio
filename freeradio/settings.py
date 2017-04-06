@@ -16,7 +16,6 @@ env.read_env('.env')
 BASE_DIR = environ.Path(__file__) - 2
 SECRET_KEY = env('DJANGO_SECRET_KEY')
 DEBUG = env.bool('DJANGO_DEBUG', False)
-
 ALLOWED_HOSTS = ['*']
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -24,7 +23,6 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'collectfast',
     'django.contrib.sites',
     'django.contrib.staticfiles',
     's3direct',
@@ -36,6 +34,7 @@ INSTALLED_APPS = [
     'ckeditor',
     'ckeditor_uploader',
     'constance',
+    'constance.backends.database',
     'freeradio.core',
     'freeradio.advertising',
     'freeradio.talent',
@@ -95,9 +94,12 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'freeradio.wsgi.application'
-
 DATABASES = {
     'default': env.db('DATABASE_URL'),
+    'default': env.db(
+        'DATABASE_URL',
+        default='sqlite:///%s' % BASE_DIR.path('freeradio.sqlite')
+    )
 }
 
 DATABASES['default'].update(
@@ -158,10 +160,7 @@ AWS_SECRET_ACCESS_KEY = env('AWS_SECRET_ACCESS_KEY', default='')
 AWS_STORAGE_BUCKET_NAME = env('AWS_S3_BUCKET', default='')
 S3DIRECT_REGION = env('S3DIRECT_REGION', default='eu-west-1')
 AWS_S3_CUSTOM_DOMAIN = env('AWS_S3_CUSTOM_DOMAIN', default='') or (
-    's3-%s.amazonaws.com/%s' % (
-        S3DIRECT_REGION,
-        AWS_STORAGE_BUCKET_NAME
-    )
+    's3-eu-west-1.amazonaws.com/%s' % AWS_STORAGE_BUCKET_NAME
 )
 
 AWS_PRELOAD_METADATA = True
@@ -184,7 +183,7 @@ CACHES = {
     'default': {
         'BACKEND': 'redis_cache.RedisCache',
         'LOCATION': [
-            env('REDIS_URL', default='redis://localhost:6379/0')
+            env('REDIS_URL', default='redis://127.0.0.1:6379')
         ],
         'OPTIONS': {
             'DB': 0,
@@ -197,14 +196,8 @@ CACHES = {
             'PICKLE_VERSION': -1
         },
         'KEY_PREFIX': 'cache'
-    },
-    'collectfast': {
-        'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
-        'LOCATION': 'collectfast'
     }
 }
-
-COLLECTFAST_CACHE = 'collectfast'
 
 NOTICEBOARD_MODELS = (
     (
@@ -349,48 +342,6 @@ THUMBNAIL_REDIS_PASSWORD = REDIS_URL_PARTS.password
 THUMBNAIL_REDIS_HOST = REDIS_URL_PARTS.hostname
 THUMBNAIL_REDIS_PORT = REDIS_URL_PARTS.port
 
-OEMBED_ENDPOINTS = (
-    (
-        (
-            'http://flickr.com/photos/*',
-            'https://flickr.com/photos/*'
-        ),
-        'https://www.flickr.com/services/oembed/'
-    ),
-    (
-        (
-            'http://vimeo\.com/*',
-            'https://vimeo\.com/*'
-        ),
-        'https://www.vimeo.com/api/oembed.json'
-    ),
-    (
-        (
-            'http://youtube.com/*',
-            'https://youtube.com/*',
-            'http://www.youtube.com/*',
-            'https://www.youtube.com/*'
-        ),
-        'https://www.youtube.com/oembed'
-    ),
-    (
-        (
-            'http://www.mixcloud.com/*',
-            'https://www.mixcloud.com/*'
-        ),
-        'https://www.mixcloud.com/oembed/'
-    ),
-    (
-        (
-            'http://www.soundcloud.com/*',
-            'https://www.soundcloud.com/*',
-            'http://soundcloud.com/*',
-            'https://soundcloud.com/*',
-        ),
-        'https://soundcloud.com/oembed?maxheight=81'
-    )
-)
-
 NOTICEBOARD_SIZES = {
     'blog.post': {
         768: [2, 2]
@@ -419,6 +370,7 @@ ADVERTISEMENT_REGIONS = {
 }
 
 
+CONSTANCE_BACKEND = 'constance.backends.database.DatabaseBackend'
 CONSTANCE_CONFIG = {
     'OFFAIR_TEXT': (
         'Our local music mix',

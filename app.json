@@ -13,9 +13,13 @@
         }
     ],
     "env": {
-        "SECRET_KEY": {
+        "DJANGO_SECRET_KEY": {
             "description": "A secret key for verifying the integrity of signed cookies.",
             "generator": "secret"
+        },
+        "DJANGO_SETTINGS_MODULE": {
+            "description": "Django settings module",
+            "value": "freeradio.settings"
         },
         "AWS_ACCESS_KEY_ID": {
             "description": "AWS access key ID"

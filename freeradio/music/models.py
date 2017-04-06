@@ -6,7 +6,6 @@ from django.utils.translation import gettext_lazy as _
 from django.utils.safestring import mark_safe
 from django.utils import timezone
 from hashlib import md5
-from oembed import OEmbedConsumer, OEmbedEndpoint
 from datetime import timedelta
 
 
@@ -61,25 +60,13 @@ class Track(models.Model):
         rendered = cache.get(cachekey)
 
         if rendered is None:
-            consumer = OEmbedConsumer()
-            for regexes, endpoint in settings.OEMBED_ENDPOINTS:
-                consumer.addEndpoint(
-                    OEmbedEndpoint(endpoint, regexes)
+            rendered = (
+                u'<a class="btn btn-default" href="%s" '
+                'target="_blank">%s</a>' % (
+                    self.sample_url,
+                    _(u'Hear a sample')
                 )
-
-            try:
-                response = consumer.embed(self.sample_url)
-            except:
-                rendered = (
-                    u'<a class="btn btn-default" href="%s" '
-                    'target="_blank">%s</a>' % (
-                        self.sample_url,
-                        _(u'Hear a sample')
-                    )
-                )
-            else:
-                rendered = response['html']
-
+            )
             cache.set(cachekey, rendered, 60 * 60 * 24)
 
         return mark_safe(rendered)
