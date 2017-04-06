@@ -16,6 +16,7 @@ env.read_env('.env')
 BASE_DIR = environ.Path(__file__) - 2
 SECRET_KEY = env('DJANGO_SECRET_KEY')
 DEBUG = env.bool('DJANGO_DEBUG', False)
+
 ALLOWED_HOSTS = ['*']
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -155,8 +156,12 @@ RQ_QUEUES = {
 AWS_ACCESS_KEY_ID = env('AWS_ACCESS_KEY_ID', default='')
 AWS_SECRET_ACCESS_KEY = env('AWS_SECRET_ACCESS_KEY', default='')
 AWS_STORAGE_BUCKET_NAME = env('AWS_S3_BUCKET', default='')
+S3DIRECT_REGION = env('S3DIRECT_REGION', default='eu-west-1')
 AWS_S3_CUSTOM_DOMAIN = env('AWS_S3_CUSTOM_DOMAIN', default='') or (
-    's3-eu-west-1.amazonaws.com/%s' % AWS_STORAGE_BUCKET_NAME
+    's3-%s.amazonaws.com/%s' % (
+        S3DIRECT_REGION,
+        AWS_STORAGE_BUCKET_NAME
+    )
 )
 
 AWS_PRELOAD_METADATA = True
@@ -167,7 +172,6 @@ STATIC_ROOT = BASE_DIR.path('staticfiles')
 MEDIA_URL = DEBUG and '/media/' or '//%s/uploads/' % AWS_S3_CUSTOM_DOMAIN
 STATIC_URL = DEBUG and '/static/' or ('//%s/static/' % AWS_S3_CUSTOM_DOMAIN)
 SITE_ID = env.int('SITE_ID', 1)
-S3DIRECT_REGION = 'eu-west-1'
 
 S3DIRECT_DESTINATIONS = {
     'podcast_episodes': {

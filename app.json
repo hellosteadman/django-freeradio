@@ -1,0 +1,64 @@
+{
+    "name": "Django Free Radio",
+    "description": "A Django project to power an Internet community radio station",
+    "repository": "https://github.com/iamsteadman/django-freeradio",
+    "keywords": ["django", "python"],
+    "image": "heroku/python",
+    "addons": [
+        {
+            "plan": "heroku-postgresql"
+        },
+        {
+            "plan": "heroku-redis"
+        }
+    ],
+    "env": {
+        "SECRET_KEY": {
+            "description": "A secret key for verifying the integrity of signed cookies.",
+            "generator": "secret"
+        },
+        "AWS_ACCESS_KEY_ID": {
+            "description": "AWS access key ID"
+        },
+        "AWS_SECRET_ACCESS_KEY": {
+            "description": "AWS secret key"
+        },
+        "AWS_STORAGE_BUCKET_NAME": {
+            "description": "AWS storage bucket name"
+        },
+        "S3DIRECT_REGION": {
+            "description": "AWS S3 region",
+            "value": "eu-west-1"
+        },
+        "AWS_S3_CUSTOM_DOMAIN": {
+            "description": "AWS S3 domain",
+            "value": "s3-eu-west-1.amazonaws.com"
+        },
+        "SITE_ID": {
+            "description": "Django Site ID",
+            "value": "1"
+        },
+        "RADIO_STREAM_URL": {
+            "description": "Shoutcast stream URL",
+            "value": "http://uk3.internet-radio.com:11168/stream"
+        },
+        "RADIO_NOWPLAYING_URL": {
+            "description": "Now-playing XML URL",
+            "value": "https://control.internet-radio.com:2199/external/rpc.php?m=streaminfo.get&username=brumradio&charset=&mountpoint=&rid=brumradio"
+        },
+        "MIXCLOUD_USERNAME": {
+            "description": "MixCloud username",
+            "value": "brumradio"
+        }
+    },
+    "formation": {
+        "web": {
+            "quantity": 1,
+            "size": "free"
+        },
+        "worker": {
+            "quantity": 1,
+            "size": "free"
+        }
+    }
+}
