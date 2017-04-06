@@ -1,0 +1,12 @@
+{% load noticeboard %}{% for class, widths in sizes.items %}{% for width, blocks in widths.items %}
+@media screen and (min-width: {{ width }}px) {
+    body.core .noticeboard .notice.{{ class }} {
+        width: {{ blocks.0|percentageof:4 }}%;
+        height: {{ blocks.1|multipliedby:136 }}px;
+    }
+
+    body.core .noticeboard .notice.{{ class }} .inner {
+        height: {{ blocks.1|multipliedby:136|add:'-16' }}px;
+    }
+}
+{% endfor %}{% endfor %}

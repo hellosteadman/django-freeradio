@@ -1,0 +1,36 @@
+{% extends 'admin/change_form.html' %}
+
+{% block extrahead %}
+    {{ block.super }}
+    <style>
+        label[for="id_monthly_weekday"] {
+            display: none;
+        }
+    </style>
+{% endblock %}
+
+{% block admin_change_form_document_ready %}
+    {{ block.super }}
+
+    <script>
+        django.jQuery(document).ready(
+            function($) {
+                var select = function() {
+                    switch(parseInt($('#id_recurrence').val())) {
+                        case -2:
+                            $('.field-box.field-monthly_number, .field-box.field-monthly_weekday').show();
+                            break;
+
+                        default:
+                            $('.field-box.field-monthly_number, .field-box.field-monthly_weekday').hide();
+                            break;
+                    }
+                };
+
+                $('.field-box.field-monthly_number, .field-box.field-monthly_weekday').hide();
+                $('#id_recurrence').on('change', select);
+                select();
+            }
+        );
+    </script>
+{% endblock admin_change_form_document_ready %}

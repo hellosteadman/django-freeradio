@@ -1,0 +1,215 @@
+{% load staticfiles %}<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>{{ title_parts|join:' | ' }}{% if title_parts %} | {% endif %}{{ SITE.name }}</title>
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <link rel="stylesheet" href="{% static 'css/public.css' %}">
+        <script src="//code.jquery.com/jquery-2.2.4.min.js"></script>
+        <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        {% block head %}{% endblock %}
+        {% if oembed_url %}<link rel="alternate" type="application/json+oembed" href="{{ oembed_url }}">{% endif %}
+
+        {% if meta_description or meta_description %}<meta name="description" content="{% if meta_description %}{{ meta_description }}{% else %}{{ META_DESCRIPTION }}{% endif %}">{% endif %}
+        {% if meta_author %}<meta name="author" content="{{ meta_author }}">{% endif %}
+
+        <meta name="twitter:card" content="summary">
+        {% if TWITTER_USERNAME %}<meta name="twitter:site" content="@{{ TWITTER_USERNAME }}">{% endif %}
+
+        {% if social_title %}<meta name="twitter:title" content="{{ social_title }}">
+        {% elif object %}<meta name="twitter:title" content="{{ object }}">
+        {% else %}<meta name="twitter:title" content="{{ TWITTER_TITLE }}">{% endif %}
+
+        {% if social_description or meta_description %}<meta name="twitter:description" content="{{ social_description|default:meta_description }}">
+        {% else %}<meta name="twitter:description" content="{{ META_DESCRIPTION }}">{% endif %}
+        {% if twitter_creator %}<meta name="twitter:creator" content="@{{ twitter_creator }}">{% endif %}
+        {% if social_image %}<meta name="twitter:image" content="{{ social_image.url }}">
+        {% elif object and object.featured_image %}<meta name="twitter:image" content="{{ object.featured_image.url }}">
+        {% else %}<meta name="twitter:image" content="{% static 'img/logo-share.png' %}">{% endif %}
+        {% if social_title %}<meta property="og:title" content="{{ social_title }}">
+        {% elif object %}<meta property="og:title" content="{{ object }}">{% endif %}
+
+        {% if social_post_kind %}<meta property="og:type" content="{{ social_post_kind }}">{% endif %}
+        <meta property="og:url" content="{{ request.build_absolute_uri }}">
+        {% if social_image %}<meta property="og:image" content="{{ social_image.url }}">
+        {% elif object and object.featured_image %}<meta property="og:image" content="{{ object.featured_image.url }}">
+        {% else %}<meta property="og:image" content="{% static 'img/logo-share.png' %}">{% endif %}
+        {% if social_description or meta_description %}<meta name="og:description" content="{{ social_description|default:meta_description }}">
+        {% else %}<meta name="og:description" content="{{ META_DESCRIPTION }}">{% endif %}
+        {% if FACEBOOK_APP_ID %}<meta property="fb:app_id" content="{{ FACEBOOK_APP_ID }}">{% endif %}
+
+        {% if social_title %}<meta itemprop="name" content="{{ social_title }}">
+        {% elif object %}<meta itemprop="name" content="{{ object }}">
+        {% else %}<meta itemprop="name" content="{{ FACEBOOK_TITLE }}">{% endif %}
+
+        <meta itemprop="description" content="{% if object and object.meta_description %}{{ object.meta_description }}{% elif meta_description %}{{ meta_description }}{% else %}{{ META_DESCRIPTION }}{% endif %}">
+        <link rel="stylesheet" href="//vjs.zencdn.net/5.8.8/video-js.css">
+        <link rel="stylesheet" href="{% static 'css/main.css' %}">
+        <link rel="stylesheet" href="//cdn-images.mailchimp.com/embedcode/horizontal-slim-10_7.css">
+        <script src="{% static 'js/jquery.min.js' %}"></script>
+        <script src="{% static 'js/bootstrap.min.js' %}"></script>
+        <script src="//vjs.zencdn.net/5.8.8/video.js"></script>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        {% if FACEBOOK_APP_ID %}<script>
+            window.fbAsyncInit = function() {
+                FB.init(
+                    {
+                        appId: '{{ FACEBOOK_APP_ID }}',
+                        xfbml: true,
+                        version: 'v2.8'
+                    }
+                );
+
+                FB.AppEvents.logPageView();
+            };
+
+            (function(d, s, id){
+                var js, fjs = d.getElementsByTagName(s)[0];
+                if (d.getElementById(id)) {return;}
+                js = d.createElement(s); js.id = id;
+                js.src = '//connect.facebook.net/en_US/sdk.js';
+                fjs.parentNode.insertBefore(js, fjs);
+             }(document, 'script', 'facebook-jssdk'));
+        </script>{% endif %}
+
+        <nav class="navbar navbar-inverse">
+            <div class="container">
+                <a class="btn btn-listen visible-xs visible-sm pull-right" href="{% url 'core:player' %}" onclick="window.open(this.href, 'freeradio-player', 'width=330,height=640,menubar=no,status=no'); return false;">
+                    <i class="fa fa-headphones"></i>
+                    Listen now
+                </a>
+
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="/">{{ SITE.name }}</a>
+                </div>
+
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav">
+                        <li{% ifequal menu_selection 'traffic:schedule' %} class="active"{% endifequal %}><a href="{% url 'traffic:schedule' %}">Schedule</a></li>
+                        <li{% if menu_selection == 'traffic:programmes' or menu_selection == 'traffic:programme' %} class="active"{% endif %}><a href="{% url 'traffic:programmes' %}">Live shows</a></li>
+                        <li{% if menu_selection == 'podcasting:podcasts' or menu_selection == 'podcasting:series' or menu_selection == 'podcasting:episode' %} class="active"{% endif %}><a href="{% url 'podcasting:podcasts' %}">Podcasts</a></li>
+                        <li{% if menu_selection == 'talent:presenters' or menu_selection == 'talent:presenter' %} class="active"{% endif %}><a href="{% url 'talent:presenters' %}">Presenters</a></li>
+                        <li{% if menu_selection == 'blog:posts' or menu_selection == 'blog:post' %} class="active"{% endif %}><a href="{% url 'blog:posts' %}">Blog</a></li>
+                        <li{% if menu_selection == 'music:playlist' %} class="active"{% endif %}><a href="{% url 'music:playlist' %}">Playlist</a></li>
+                        <li><a href="https://freeradio.bigcartel.com/" target="_blank">Shop</a></li>
+                    </ul>
+
+                    <a class="btn btn-listen navbar-btn navbar-right visible-md visible-lg visible-xl" href="{% url 'core:player' %}" onclick="window.open(this.href, 'freeradio-player', 'width=330,height=640,menubar=no,status=no'); return false;">
+                        <i class="fa fa-headphones"></i>
+                        <span>Listen now</span>
+                    </a>
+                </div>
+            </div>
+        </nav>
+
+        {% block main %}
+            <div class="jumbotron" style="{% spaceless %}{% block jumbotron_css %}{% endblock %}{% endspaceless %}">
+                <div class="jumbotron-content">
+                    <div class="container">
+                        <div class="page-header">
+                            {% block page_header %}{% endblock %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="container">
+                {% block container %}
+                    <main class="content">
+                        {% block page_content %}{% endblock %}
+                    </main>
+                {% endblock container %}
+            </div>
+        {% endblock main %}
+
+        <footer>
+            <div class="newsletter-signup">
+                <div class="container">
+                    <h2>Subscribe and stay in touch</h2>
+                    <div id="mc_embed_signup">
+                        <form action="//freeradio.us5.list-manage.com/subscribe/post?u=ff5d7e986a83ed1a1e1de6c27&amp;id=19d2b7f483" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+                            <div id="mc_embed_signup_scroll">
+                                <input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL" placeholder="Your email address" required>
+                                <div style="position: absolute; left: -5000px;" aria-hidden="true"><input type="text" name="b_0982045289b54c3687b1fe99f_59e2e9ec4a" tabindex="-1" value=""></div>
+                                <div class="clear">
+                                    <input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button">
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="app-links">
+                <div class="container">
+                    <h2>Take {{ SITE.name }} with you</h2>
+                    <p>
+                        iPhone and Android users can download the
+                        <strong>{{ SITE.name }}</strong> app from the App Store and
+                        Google Play.
+                    </p>
+
+                    <p>
+                        <a href="{{ IOS_APP_URL }}" target="_blank">
+                            <img src="{% static 'img/app-store.svg' %}" alt="App Store" height="60">
+                        </a>
+                        <a href="{{ ANDROID_APP_URL }}" target="_blank">
+                            <img src="{% static 'img/google-play.svg' %}" alt="Google Play" height="60">
+                        </a>
+                    </p>
+                </div>
+            </div>
+
+            <div class="credits">
+                <div class="container">
+                    Made with ❤︎ in Birmingham
+                </div>
+            </div>
+        </footer>
+
+        <script src="{% static 'js/jquery.waypoints.min.js' %}"></script>
+        <script src="{% static 'js/jquery.waypoints.infinite.min.js' %}"></script>
+        <script src="{% static 'js/jquery.isotope.min.js' %}"></script>
+        <script src="{% static 'js/jquery.isotope.packery.min.js' %}"></script>
+        <script src="{% static 'js/jquery.masonry.horizontal.js' %}"></script>
+
+        <script>window.RADIO_NOWPLAYING_URL = '{{ RADIO_NOWPLAYING_URL|escapejs }}';</script>
+        <script src="{% static 'js/freeradio.js' %}"></script>
+
+        <script>
+            {% if body_classes %}
+                $('body').attr('class', '{{ body_classes|join:' ' }}');
+            {% else %}
+                $('body').attr('class', '');
+            {% endif %}
+
+            $(document).ready(
+                function() {
+                    if(window.location.hash == '#support') {
+                        $('#support').modal('show');
+                    }
+                }
+            );
+        </script>
+
+        {% if GOOGLE_ANALYTICS_ID %}
+            <script>
+                (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+                m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+                })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+                ga('create', '{{ GOOGLE_ANALYTICS_ID }}', 'auto');
+                ga('send', 'pageview');
+            </script>
+        {% endif %}
+    </body>
+</html>

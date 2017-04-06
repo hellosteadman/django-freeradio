@@ -1,0 +1,71 @@
+{% extends 'blog/base.html' %}
+{% load blog thumbnail oembed %}
+
+{% block page_header %}
+    <div class="row">
+        <div class="col-sm-8 col-sm-offset-2">
+            <h1 class="media-heading">
+                <a href="{{ object.get_absolute_url }}">{{ object.title }}</a>
+            </h1>
+
+            <p class="excerpt">
+                Posted on {{ object.published|date:'jS F Y' }}
+                by {{ object.author.get_full_name|default:object.author.username }}
+            </p>
+        </div>
+    </div>
+{% endblock page_header %}
+
+{% block page_content %}
+    <div class="row">
+        <div class="col-md-10 col-md-offset-2">
+            {% thumbnail object.featured_image '970x545' crop='center' as thumb %}
+                <img src="{{ thumb.url }}">
+            {% endthumbnail %}
+            &nbsp;
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-2 hidden-xs hidden-sm">
+            {% if object.author.presenter_profile %}
+                <a href="{{ object.author.presenter_profile.get_absolute_url }}">
+            {% endif %}
+                <img class="avatar" style="max-width: 165px" src="{{ post.author|avatar:165 }}" alt="{{ post.author.get_full_name|default:post.author.username }}">
+            {% if object.author.presenter_profile %}</a>{% endif %}
+        </div>
+
+        <div class="col-xs-12 col-sm-12 col-md-8">
+            <article class="object">
+                <div class="body">
+                    {{ object.body|oembed|safe }}
+                </div>
+
+                {% include 'core/share.inc.html' %}
+                &nbsp;
+
+                {% if object.blogger %}
+                    <div class="well">
+                        <div class="media">
+                            <div class="media-left">
+                                {% thumbnail object.blogger.photo '150x150' crop='center' as thumb %}
+                                    <img class="avatar" style="max-width: 150px" src="{{ thumb.url }}" alt="{{ object.blogger.name }}">
+                                {% endthumbnail %}
+                            </div>
+                            <div class="media-body">
+                                <h3 class="media-heading">About the author</h3>
+                                {{ object.blogger.biography|safe }}
+                                {% if object.blogger.twitter_username %}<a class="btn btn-default" href="https://twitter.com/{{ object.blogger.twitter_username }}/" target="_blank">
+                                    <i class="fa fa-twitter"></i> Follow @{{ object.blogger.twitter_username }}
+                                </a>{% endif %}
+                                {% if object.blogger.facebook_username %}<a class="btn btn-default" href="https://www.facebook.com/{{ object.blogger.facebook_username }}/" target="_blank">
+                                    <i class="fa fa-facebook"></i> Follow {{ object.blogger.name }}
+                                </a>{% endif %}
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            </article>
+        </div>
+    </div>
+{% endblock page_content %}

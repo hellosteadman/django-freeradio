@@ -1,0 +1,13 @@
+<div class="btn-shares btn-{{ style|default:'inline' }}">
+    <a class="btn btn-share btn-twitter{% if style == 'vertical' %} btn-block{% endif %} btn-circle" href="https://twitter.com/intent/tweet?text={{ object|urlencode }}&amp;url={{ request.build_absolute_uri|urlencode }}" target="_blank">
+        <i class="fa fa-twitter"></i>
+    </a>
+
+    <a class="btn btn-share btn-facebook{% if style == 'vertical' %} btn-block{% endif %} btn-circle" href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri|urlencode }}" target="_blank">
+        <i class="fa fa-facebook"></i>
+    </a>
+
+    <a class="btn btn-share btn-pinterest{% if style == 'vertical' %} btn-block{% endif %} btn-circle" href="https://pinterest.com/pin/create/button/?url={{ request.build_absolute_uri|urlencode }}">
+        <i class="fa fa-pinterest"></i>
+    </a>
+</div>

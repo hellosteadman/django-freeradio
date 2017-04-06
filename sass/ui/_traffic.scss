@@ -1,0 +1,72 @@
+.table.schedule {
+    tr:first-child td {
+        border-top-width: 0;
+    }
+
+    td.time {
+        font-size: 2em;
+        width: 10%;
+        text-align: right;
+    }
+
+    td.logo {
+        width: 320px;
+    }
+
+    td.programme {
+        h2 {
+            font-size: 1.5em;
+            margin: .5em 0 0 0;
+
+            a {
+                color: #000;
+            }
+        }
+    }
+}
+
+.row.programmes {
+    h2 {
+        font-size: 1.5em;
+        margin: 0;
+
+        a {
+            color: inherit;
+        }
+    }
+}
+
+&.programme {
+    .jumbotron {
+        padding-bottom: 126px;
+        margin-bottom: 0;
+    }
+
+    aside {
+        margin-top: -126px;
+        z-index: 30;
+        position: relative;
+    }
+
+    #programme-updates {
+        margin-top: 15px;
+    }
+
+    .programme-post {
+        font-size: 1.25em;
+        line-height: 1.5em;
+        margin: 1em 0;
+
+        h3 a {
+            color: inherit;
+        }
+    }
+}
+
+&.programme {
+    .upcoming, .description {
+        margin-top: 15px;
+        font-size: 1.5em;
+        line-height: 1.5em;
+    }
+}

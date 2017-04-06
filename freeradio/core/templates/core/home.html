@@ -1,0 +1,120 @@
+{% extends 'base.html' %}
+{% load staticfiles noticeboard thumbnail advertising %}
+
+{% block head %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% url 'noticeboard:stylesheet' %}">
+{% endblock head %}
+
+{% block main %}
+    <div class="jumbotron" style="{% spaceless %}{% if on_air_now and on_air_now.banner %}
+        background-image: url('{{ on_air_now.banner.url }}'); color: #fff;
+    {% elif on_air_next.programme and on_air_next.programme.banner %}
+        background-image: url('{{ on_air_next.programme.banner.url }}'); color: #fff;
+    {% endif %}{% endspaceless %}">
+        <div class="jumbotron-content">
+            <div class="container">
+                <div class="page-header">
+                    {% if on_air_now %}
+                        <h1>
+                            <small>On air now</small><br>
+                            <a href="{{ on_air_now.get_absolute_url }}">{{ on_air_now }}</a>
+                        </h1>
+                    {% else %}
+                        <h1>
+                            <small>Now playing</small><br>
+                            {{ OFFAIR_TEXT }}
+                        </h1>
+
+                        {% if on_air_next.date and on_air_next.programme %}
+                            <p class="upcoming">
+                                {% spaceless %}
+                                    <strong>Up next at
+                                    {% if on_air_next.date.hour == 12 and not on_air_next.minute %}
+                                        noon
+                                    {% elif not on_air_next.date.hour and not on_air_next.minute %}
+                                        midnight
+                                    {% elif on_air_next.date.minute %}
+                                        {{ on_air_next.date|time:'g:iA'|lower }}
+                                    {% else %}
+                                        {{ on_air_next.date|time:'gA'|lower }}
+                                    {% endif %}
+                                {% endspaceless %}:</strong>
+                                <a href="{{ on_air_next.programme.get_absolute_url }}">{{ on_air_next.programme }}</a>
+                            </p>
+                        {% endif %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        {% ad_region 'home_01' %}
+        {% if homepage_features %}
+            <main class="content">
+                <div class="row">
+                    <div class="col-sm-7">
+                        {% with feature=homepage_features.0 %}
+                            <article class="homepage-feature"{% thumbnail feature.image '653x400' crop='center' as thumb %} style="background-image: url('{{ thumb.url }}');"{% endthumbnail %}>
+                                <a href="{{ feature.url }}">
+                                    <div class="inner">
+                                        <h3>{{ feature.title }}</h3>
+                                        {{ feature.subtitle|linebreaks }}
+                                    </div>
+                                </a>
+                            </article>
+                        {% endwith %}
+                    </div>
+
+                    <div class="col-sm-5">
+                        <ul class="media-list">
+                            {% for feature in homepage_features|slice:'1:' %}
+                                <li class="media">
+                                    <a class="media-object media-left" href="{{ feature.url }}">
+                                        {% thumbnail feature.image '150x75' crop='center' as thumb %}
+                                            <img src="{{ thumb.url }}">
+                                        {% endthumbnail %}
+                                    </a>
+
+                                    <Div class="media-body">
+                                        <h3 class="media-heading">
+                                            <a href="{{ feature.url }}">{{ feature.title }}</a>
+                                        </h3>
+
+                                        <div class="hidden-sm">
+                                            {{ feature.subtitle|linebreaks }}
+                                        </div>
+                                    </div>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+
+                &nbsp;
+            </main>
+        {% endif %}
+
+        {% ad_region 'home_02' %}
+    </div>
+
+    <div class="post-intro">
+        <div class="container">
+            <div class="welcome">
+                <h2>{{ HOME_TEXT }}</h2>
+                {{ HOME_INTRO|linebreaks }}
+            </div>
+
+            <div class="noticeboard">
+                <div class="notice-sizer">
+                    <div class="inner"></div>
+                </div>
+
+                {% for notice in noticeboard|slice:':24' %}{% spaceless %}
+                    {% include 'noticeboard/notice.html' %}
+                {% endspaceless %}{% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock main %}

@@ -1,0 +1,59 @@
+{% extends 'podcasting/base.html' %}
+{% load thumbnail staticfiles %}
+
+{% block head %}
+    {{ block.super }}
+    <script defer src="{{ object.widget_url }}"></script>
+{% endblock head %}
+
+{% block jumbotron_css %}
+    background: #000 url('{% if series.banner %} {{ series.banner.url }}{% endif %}') center no-repeat; background-size: cover; color: #fff;
+{% endblock jumbotron_css %}
+
+{% block page_header %}
+    <div class="clearfix">
+        <h1 class="pull-left">{{ series }}</h1>
+    </div>
+{% endblock page_header %}
+
+{% block page_content %}
+    <div class="row">
+        <div class="col-sm-3">
+            <aside>
+                <a class="thumbnail" href="{{ series.get_absolute_url }}">
+                    {% thumbnail series.artwork '253x253' crop='center' as thumb %}
+                        <img src="{{ thumb.url }}">
+                    {% empty %}
+                        <img src="//placehold.it/253x253?text={{ series|urlencode }}">
+                    {% endthumbnail %}
+                </a>
+
+                <p class="show-info">{{ series.subtitle }}</p>
+                <p class="text-muted">
+                    Hosted by
+                    {% for presenter in series.presenters.all %}{% spaceless %}
+                        {% if not forloop.first and forloop.counter < series.presenters.count %},{% endif %}
+                        {% if forloop.last and not forloop.first %}&nbsp;and&nbsp;{% endif %}<a href="{{ presenter.get_absolute_url }}">{{ presenter.name }}</a>
+                    {% endspaceless %}{% endfor %}
+                </p>
+
+                <button class="btn btn-default btn-block" data-action="podiant:subscribe">
+                    <i class="fa fa-rss"></i>
+                    Subscribe to the show
+                </button>
+            </aside>
+        </div>
+
+        <div class="col-sm-9">
+            {% block podcast_content %}
+                <h2>Episodes</h2>
+                <div id="podcast-episodes" class="infinite-scroll">
+                    {% include 'podcasting/episodes.inc.html' %}
+                </div>
+
+                {% include 'core/share.inc.html' %}
+                &nbsp;
+            {% endblock podcast_content %}
+        </div>
+    </div>
+{% endblock page_content %}

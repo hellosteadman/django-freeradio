@@ -1,0 +1,57 @@
+{% extends 'traffic/base.html' %}
+{% load thumbnail staticfiles %}
+
+{% block page_header %}
+    <div class="clearfix">
+        <h1 class="pull-left">{{ presenter }}</h1>
+    </div>
+{% endblock page_header %}
+
+{% block page_content %}
+    <div class="row">
+        <div class="col-sm-3">
+            <aside>
+                <a href="{{ presenter.get_absolute_url }}">
+                    {% thumbnail presenter.photo '253x253' crop='center' as thumb %}
+                        <img class="avatar" style="max-width: 253px" src="{{ thumb.url }}">
+                    {% endthumbnail %}
+                </a>
+
+                {% if presenter.twitter_username or presenter.facebook_username %}
+                    <h2>Follow {{ presenter.short_name }}</h2>
+                    {% if presenter.twitter_username %}
+                        <a class="btn btn-default" href="https://twitter.com/{{ presenter.twitter_username }}/" target="_blank">
+                            <i class="fa fa-twitter"></i>
+                            @{{ presenter.twitter_username }}
+                        </a>
+                    {% endif %}
+
+                    {% if presenter.facebook_username %}
+                        <a class="btn btn-default" href="https://www.facebook.com/{{ presenter.facebook_username }}/" target="_blank">
+                            <i class="fa fa-facebook"></i>
+                            Facebook
+                        </a>
+                    {% endif %}
+                {% endif %}
+            </aside>
+        </div>
+
+        <div class="col-sm-9">
+            {% if presenter.bio %}
+                <div class="bio">
+                    {{ presenter.bio|safe }}
+                </div>
+            {% endif %}
+
+            {% include 'core/share.inc.html' %}
+            &nbsp;
+
+            {% if updates %}
+                <h2>Catch up on {{ presenter.short_name }}'s shows</h2>
+                <div id="programme-updates" class="infinite-scroll">
+                    {% include 'talent/updates.inc.html' %}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% endblock page_content %}

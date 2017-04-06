@@ -1,0 +1,31 @@
+.row.presenters {
+    .caption {
+        text-align: center;
+    }
+
+    h2 {
+        font-size: 1.5em;
+        margin: 0;
+
+        a {
+            color: inherit;
+        }
+    }
+}
+
+.jumbotron {
+    &:before {
+        background: inherit;
+    }
+}
+
+.bio {
+    font-size: 1.5em;
+    line-height: 2em;
+}
+
+.alert-post {
+    background: #f6f6f6;
+    font-size: 1.5em;
+    line-height: 2em;
+}

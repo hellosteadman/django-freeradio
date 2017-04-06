@@ -1,0 +1,18 @@
+<div class="notice {{ notice.content_type.app_label }} {{ notice.content_type.model }}{% if notice.image %} with-image{% endif %}" data-blocks-x="{{ notice.x_blocks }}" data-blocks-y="{{ notice.y_blocks }}">
+    <div class="inner"{% if notice.image %} style="background-image: url('{{ notice.image.url }}');"{% endif %}>
+        <a href="{{ notice.cta_url }}">
+            <div class="text">
+                <h2>
+                    <small>{{ notice.subtitle }}</small><br>
+                    {{ notice.title }}
+                </h2>
+
+                {% if notice.description and notice.y_blocks > 1 %}
+                    {{ notice.description|truncatewords:20|linebreaks }}
+                {% endif %}
+
+                <span class="cta">{{ notice.cta_text }}</span>
+            </div>
+        </a>
+    </div>
+</div>

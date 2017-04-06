@@ -1,0 +1,99 @@
+.navbar {
+    font-family: roboto_condensed;
+    text-transform: uppercase;
+    border-radius: 0;
+    border-width: 0;
+
+    &.navbar-inverse .navbar-nav > li {
+        > a {
+            color: #fff;
+            padding-top: 12px;
+            padding-bottom: 18px;
+        }
+
+        > a:hover, > a:focus, &.active a {
+            color: #fff;
+            background: #000;
+        }
+
+        > &.active a {
+            &:hover, &:focus {
+                color: #ddd;
+            }
+        }
+
+        > .donate-form {
+            button {
+                background: transparent;
+                color: #fff;
+                font-family: roboto_condensed;
+                text-transform: uppercase;
+                border-radius: 0;
+                text-align: left;
+                padding-top: 12px;
+                padding-bottom: 18px;
+
+                &:hover {
+                    background: #000;
+                }
+            }
+        }
+    }
+
+    + .jumbotron {
+        margin-top: -20px;
+    }
+
+    > .container .navbar-brand {
+        text-indent: -9999em;
+        background: url('../img/logo.svg') center no-repeat;
+        background-size: contain;
+        width: 115px;
+        height: 72px;
+        margin-left: 15px;
+
+        @media (min-width: $grid-float-breakpoint) {
+            padding: 0;
+            margin: 0 15px 0 0;
+        }
+    }
+
+    .navbar-toggle {
+        margin-top: 17px;
+    }
+
+    .btn.btn-listen {
+        text-transform: uppercase;
+        margin-top: 17px;
+        background: #000;
+        color: #fff;
+        font-size: 1.5em;
+    }
+
+    @media (min-width: $grid-float-breakpoint) {
+        .navbar-nav > li > a {
+            height: 72px;
+            line-height: 48px;
+        }
+
+        .btn.btn-listen {
+            height: 56px;
+            padding: 15px 30px;
+            background: transparent;
+            color: #fff;
+            margin-top: 8px;
+        }
+    }
+
+    @media screen and (max-width: 1199px) {
+        .btn.btn-listen {
+            padding-left: 5px;
+            padding-right: 5px;
+            margin-top: 10px;
+
+            span {
+                display: none;
+            }
+        }
+    }
+}

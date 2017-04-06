@@ -1,0 +1,11 @@
+{% for ad in ads %}{% spaceless %}
+    <div class="bcwfujtfnfou">
+        {% if ad.html %}
+            {{ ad.html|safe }}
+        {% else %}
+            {% if ad.url %}<a href="{{ ad.url }}" target="_blank">{% endif %}
+                {% if ad.image %}<img src="{{ ad.image.url }}" alt="{{ ad.name }}">{% else %}{{ ad.name }}{% endif %}
+            {% if ad.url %}</a>{% endif %}
+        {% endif %}
+    </div>
+{% endspaceless %}{% endfor %}

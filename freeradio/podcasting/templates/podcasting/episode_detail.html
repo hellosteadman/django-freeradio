@@ -1,0 +1,27 @@
+{% extends 'podcasting/series_detail.html' %}
+{% load thumbnail staticfiles %}
+
+{% block podcast_content %}
+    <article class="podcast-episode">
+        <h2>
+            <a href="{{ episode.get_absolute_url }}">{{ episode.title }}</a>
+            <small>{{ episode.published|date:'jS F, Y' }}</small>
+        </h2>
+
+        {{ episode.player }}
+        {{ episode.description|safe }}
+
+        <div class="row">
+            <div class="col-sm-6">
+                {% include 'core/share.inc.html' %}
+            </div>
+
+            <div class="col-sm-6">
+                <a class="btn btn-default pull-right btn-download" href="{{ episode.get_download_url }}" download>
+                    <i class="fa fa-download"></i> Download episode
+                </a>
+            </div>
+        </div>
+        &nbsp;
+    </article>
+{% endblock podcast_content %}

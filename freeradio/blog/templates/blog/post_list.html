@@ -1,0 +1,48 @@
+{% extends 'blog/base.html' %}
+{% load blog thumbnail %}
+
+{% block page_header %}
+    <h1>This is our blog</h1>
+{% endblock page_header %}
+
+{% block page_content %}
+    {% for post in object_list %}
+        <article class="post">
+            <div class="media">
+                <div class="media-left">
+                    <a href="{{ post.get_absolute_url }}">
+                        {% thumbnail post.featured_image '150x150' crop='center' as thumb %}
+                            <img class="media-object" src="{{ thumb.url }}">
+                        {% empty %}
+                            <img class="avatar media-object" src="{{ post.author|avatar }}" alt="{{ post.author.get_full_name|default:post.author.username }}">
+                        {% endthumbnail %}
+                    </a>
+                </div>
+                <div class="media-body">
+                    <h2 class="media-heading">
+                        <a href="{{ post.get_absolute_url }}">{{ post.title }}</a>
+                        <small>by {{ post.author.get_full_name|default:post.author.username }}</small>
+                    </h2>
+
+                    <p class="excerpt">
+                        {{ post.get_excerpt }}
+                        <a href="{{ post.get_absolute_url }}">Read more...</a>
+                    </p>
+                </div>
+            </div>
+        </article>
+        &nbsp;
+    {% endfor %}
+
+    {% if is_paginated %}
+        <div class="clearfix">
+            {% if page_obj.has_previous %}
+                <a href="?page={{ page_obj.previous_page_number }}" class="btn btn-default btn-pagination pull-left">Previous page</a>
+            {% endif %}
+
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}" class="btn btn-default btn-pagination pull-right">Next page</a>
+            {% endif %}
+        </div>
+    {% endif %}
+{% endblock page_content %}

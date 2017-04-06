@@ -1,0 +1,57 @@
+.jumbotron {
+    background-color: #000;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    color: #fff;
+    position: relative;
+    width: 100%;
+
+    &:before {
+        /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#000000+0,000000+100&0.2+0,0.8+61 */
+        background: -moz-linear-gradient(top, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.8) 61%, rgba(0,0,0,0.8) 100%); /* FF3.6-15 */
+        background: -webkit-linear-gradient(top, rgba(0,0,0,0.2) 0%,rgba(0,0,0,0.8) 61%,rgba(0,0,0,0.8) 100%); /* Chrome10-25,Safari5.1-6 */
+        background: linear-gradient(to bottom, rgba(0,0,0,0.2) 0%,rgba(0,0,0,0.8) 61%,rgba(0,0,0,0.8) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#33000000', endColorstr='#cc000000',GradientType=0 ); /* IE6-9 */
+        display: block;
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        content: ' ';
+        z-index: 10;
+    }
+
+    a {
+        color: inherit;
+    }
+
+    h1 {
+        small {
+            text-transform: uppercase;
+            font-size: .5em;
+            color: #fff;
+        }
+    }
+
+    .jumbotron-content {
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        position: relative;
+        z-index: 20;
+    }
+
+    .page-header {
+        margin: 0 auto;
+        padding: 0;
+        border-bottom: 0;
+
+        h1 {
+            font-size: 3em;
+            margin: 0;
+        }
+    }
+}

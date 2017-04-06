@@ -1,0 +1,118 @@
+{% extends 'music/base.html' %}
+{% load thumbnail %}
+
+{% block main %}
+    {% for playlist in object_list %}
+        <div class="jumbotron">
+            <div class="jumbotron-content">
+                <div class="container">
+                    <div class="page-header">
+                        <h1>{{ playlist.name }}</h1>
+                        {{ playlist.description|safe }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <ul class="media-list">
+                <div class="programmes row">
+                    {% for track in playlist.tracks_recently_added %}
+                        {% if forloop.first %}
+                            <div class="col-md-12">
+                                <h2>Recently added</h2>
+                            </div>
+                        {% endif %}
+
+                        <div class="col-md-4">
+                            <a{% if track.track.sample_url %} href="#track-{{ track.track.pk }}" data-toggle="modal"{% elif track.track.purchase_url %} href="{{ track.track.purchase_url }}" target="_blank"{% elif track.track.artist.url %} href="{{ track.track.artist.url }}" target="_blank"{% endif %}>
+                                {% thumbnail track.track.artwork|default:track.track.artist.photo '350x168' crop='center' as thumb %}
+                                    <img src="{{ thumb.url }}">
+                                {% empty %}
+                                    <img src="//placehold.it/350x168?text={{ programme|urlencode }}">
+                                {% endthumbnail %}
+                            </a>
+
+                            <div class="caption">
+                                <h3>{{ track.track.artist }} - {{ track.track.title }}</h3>
+
+                                {% if track.track.sample_url %}
+                                    <a class="btn btn-default" href="#track-{{ track.track.pk }}" data-toggle="modal"><i class="fa fa-play"></i> Play</a>
+                                {% elif track.track.purchase_url %}
+                                    <a class="btn btn-default" href="{{ track.track.purchase_url }}" target="_blank">Buy it now</a>
+                                {% elif track.track.artist.url %}
+                                    <a class="btn btn-default" href="{{ track.track.artist.url }}" target="_blank">Find out more</a>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        {% if forloop.counter|divisibleby:3 and not forloop.last %}
+                </div>
+                &nbsp;
+                <div class="programmes row">
+                        {% endif %}
+                    {% endfor %}
+                </div>
+
+                <div class="programmes row">
+                    {% for track in playlist.tracks_not_recently_added %}
+                        {% if forloop.first and playlist.tracks_recently_added.exists %}
+                            <div class="col-md-12">
+                                <h2>Also on {{ playlist.name }}</h2>
+                            </div>
+                        {% endif %}
+
+                        <div class="col-md-3">
+                            <a{% if track.track.sample_url %} href="#track-{{ track.track.pk }}" data-toggle="modal"{% elif track.track.purchase_url %} href="{{ track.track.purchase_url }}" target="_blank"{% elif track.track.artist.url %} href="{{ track.track.artist.url }}" target="_blank"{% endif %}>
+                                {% thumbnail track.track.artwork|default:track.track.artist.photo '263x126' crop='center' as thumb %}
+                                    <img src="{{ thumb.url }}">
+                                {% empty %}
+                                    <img src="//placehold.it/350x168?text={{ programme|urlencode }}">
+                                {% endthumbnail %}
+                            </a>
+
+                            <div class="caption">
+                                <h3>{{ track.track.artist }} - {{ track.track.title }}</h3>
+
+                                {% if track.track.sample_url %}
+                                    <a class="btn btn-default" href="#track-{{ track.track.pk }}" data-toggle="modal"><i class="fa fa-play"></i> Play</a>
+                                {% elif track.track.purchase_url %}
+                                    <a class="btn btn-default" href="{{ track.track.purchase_url }}" target="_blank">Buy it now</a>
+                                {% elif track.track.artist.url %}
+                                    <a class="btn btn-default" href="{{ track.track.artist.url }}" target="_blank">Find out more</a>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        {% if forloop.counter|divisibleby:4 and not forloop.last %}
+                </div>
+                &nbsp;
+                <div class="programmes row">
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </ul>
+        </div>
+
+        {% for track in playlist.playlisttrack_set.select_related %}{% if track.track.sample_url %}
+            <div id="track-{{ track.track.pk }}" class="modal fade" tabindex="-1" role="dialog">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title">{{ track }}</h4>
+                        </div>
+
+                        <div class="modal-body">
+                            {{ track.track.render_sample }}
+                        </div>
+
+                        <div class="modal-footer">
+                            {% if track.track.purcahse_url %}<a class="btn btn-default" href="{{ track.track.purchase_url }}" data-target="_blank">Buy it</a>{% endif %}
+                        </div>
+                    </div><!-- /.modal-content -->
+                </div><!-- /.modal-dialog -->
+            </div><!-- /.modal -->
+        {% endif %}{% endfor %}
+    {% endfor %}
+{% endblock main %}

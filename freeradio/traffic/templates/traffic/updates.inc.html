@@ -1,0 +1,39 @@
+{% load blog oembed %}
+
+{% for update in updates.object_list %}
+    <div class="infinite-item">
+        {% if update.kind == 'episode' %}
+            {{ update.render_media }}
+        {% elif update.kind == 'post' %}
+            <article id="update-{{ update.pk }}" class="programme-post">
+                <div class="media">
+                    <div class="media-left">
+                        <img class="media-avatar media-object" src="{{ update.author|avatar:'116' }}" alt="{{ update.author.get_full_name|default:update.author.username }}">
+                    </div>
+                    <div class="media-body">
+                        <h3 class="media-heading">
+                            <a href="#update-{{ update.pk }}">
+                                {{ update.title }}
+                                <small>{{ update.date|date:'jS F, Y' }}</small>
+                            </a>
+                        </h3>
+
+                        {{ update.description|oembed|safe }}
+                    </div>
+                </div>
+            </article>
+        {% else %}
+            <div class="alert alert-{{ update.kind }}">
+                {% if update.url %}
+                    {{ update.render_media }}
+                {% endif %}
+
+                {{ update.description|safe }}
+            </div>
+        {% endif %}
+    </div>
+{% endfor %}
+
+{% if updates.has_next %}
+    <a href="?page={{ updates.next_page_number }}" class="btn btn-default infinite-more-link">Load more</a>
+{% endif %}

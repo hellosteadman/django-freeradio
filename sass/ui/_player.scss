@@ -1,0 +1,67 @@
+#player-container {
+    background: #444;
+    color: #fff;
+    padding: 15px 0;
+    position: fixed;
+    right: 0;
+    bottom: -62px;
+    left: 0;
+    transition: bottom 1s ease;
+
+    &.active {
+        bottom: 0;
+    }
+
+    .video-js {
+        width: 220px;
+        height: 32px;
+        background: transparent;
+        float: left;
+
+        .vjs-control-bar {
+            background: transparent;
+        }
+
+        .vjs-fullscreen-control {
+            display: none;
+        }
+    }
+
+    .now-playing {
+        font-family: roboto_condensed;
+        text-transform: uppercase;
+        float: left;
+        line-height: 32px;
+        display: none;
+
+        &.active {
+            display: block;
+        }
+
+        .pre {
+            color: #ddd;
+        }
+    }
+
+    .popout {
+        color: #fff;
+        float: right;
+        display: block;
+        line-height: 32px;
+
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+
+    .video-js .vjs-big-play-button,
+    .video-js:hover .vjs-big-play-button,
+    .video-js .vjs-big-play-button:focus {
+        width: auto;
+        height: auto;
+        top: auto;
+        left: auto;
+        line-height: 32px;
+        border-width: 0;
+    }
+}

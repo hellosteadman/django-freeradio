@@ -1,0 +1,37 @@
+{% load oembed %}
+
+{% for update in updates.object_list %}
+    <div class="infinite-item">
+        {% if update.kind == 'episode' %}
+            <div class="panel panel-default">
+                {% ifchanged update.programme.pk %}
+                    <div class="panel-heading">
+                        <h3 class="panel-title">
+                            <a href="{{ update.programme.get_absolute_url }}">{{ update.programme }}</a>
+                        </h3>
+                    </div>
+                {% endifchanged %}
+
+                <div class="panel-body">
+                    {{ update.render_media }}
+                </div>
+
+                <div class="panel-footer">
+                    {{ update.date|date:'jS F, Y' }}
+                </div>
+            </div>
+        {% else %}
+            <div class="alert alert-{{ update.kind }}">
+                {% if update.url %}
+                    {{ update.render_media }}
+                {% endif %}
+
+                {{ update.description|oembed|safe }}
+            </div>
+        {% endif %}
+    </div>
+{% endfor %}
+
+{% if updates.has_next %}
+    <a href="?page={{ updates.next_page_number }}" class="btn btn-default infinite-more-link">Load more</a>
+{% endif %}

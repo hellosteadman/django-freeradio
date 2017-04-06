@@ -1,0 +1,61 @@
+{% extends 'traffic/base.html' %}
+{% load thumbnail %}
+
+{% block page_header %}
+    <div class="clearfix">
+        <h1 class="pull-left">Schedule</h1>
+
+        <ul class="nav nav-pills pull-right">
+            {% for day in days %}
+                <li role="presentation"{% if day.selected %} class="active"{% endif %}>
+                    <a href="{{ day.url }}">{{ day.name }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endblock page_header %}
+
+{% block page_content %}
+    <table class="schedule table">
+        <tbody>
+            {% for date, programme in schedule %}
+                <tr>
+                    <td class="time">
+                        {% if date.minute %}
+                            {{ date|time:'g:iA'|lower }}
+                        {% else %}
+                            {{ date|time:'gA'|lower }}
+                        {% endif %}
+                    </td>
+
+                    <td class="logo">
+                        <a href="{{ programme.get_absolute_url }}">
+                            {% thumbnail programme.logo '320x168' crop='center' as thumb %}
+                                <img src="{{ thumb.url }}">
+                            {% empty %}
+                                <img src="//placehold.it/320x168?text={{ programme|urlencode }}">
+                            {% endthumbnail %}
+                        </a>
+                    </td>
+
+                    <td class="programme">
+                        <h2>
+                            {% if programme.name %}
+                                <a href="{{ programme.get_absolute_url }}">{{ programme.name }}</a>
+                                {% if programme.presenters.exists %}
+                                    <small><br>with {{ programme.get_presenters_display }}</small>
+                                {% endif %}
+                            {% else %}
+                                <a href="{{ programme.get_absolute_url }}">{{ programme.get_presenters_display }}</a>
+                            {% endif %}
+                        </h2>
+
+                        <p>
+                            {{ programme.upcoming_notes|default:programme.subtitle }}
+                        </p>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock page_content %}

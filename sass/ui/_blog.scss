@@ -1,0 +1,29 @@
+article.post {
+    .media {
+        h2 {
+            margin-top: 0;
+
+            a {
+                color: inherit;
+            }
+        }
+
+        .excerpt {
+            font-size: 1.5em;
+            line-height: 2em;
+        }
+    }
+}
+
+&.post {
+    h1 {
+        a {
+            color: inherit;
+        }
+    }
+
+    .body {
+        font-size: 1.5em;
+        line-height: 1.5em;
+    }
+}

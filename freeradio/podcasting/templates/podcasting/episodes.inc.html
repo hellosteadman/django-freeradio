@@ -1,0 +1,13 @@
+{% for episode in episodes.object_list %}
+    <div class="infinite-item">
+        <article id="update-{{ update.pk }}" class="podcast-episode">
+            <h3>
+                <a href="{{ episode.get_absolute_url }}">{{ episode.title }}</a>
+                <small>{{ episode.published|date:'jS F, Y' }}</small>
+            </h3>
+
+            {{ episode.player }}
+            {{ episode.description|safe }}
+        </article>
+    </div>
+{% endfor %}

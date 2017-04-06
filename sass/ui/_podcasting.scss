@@ -1,0 +1,60 @@
+.row.series {
+    h2 {
+        font-size: 1.5em;
+        margin: .5em 0 0;
+
+        a {
+            color: inherit;
+        }
+    }
+}
+
+&.series, &.episode {
+    .jumbotron {
+        padding-bottom: 126px;
+        margin-bottom: 0;
+    }
+
+    aside {
+        margin-top: -126px;
+        position: relative;
+        z-index: 100;
+    }
+}
+
+#podcast-episodes {
+    margin-top: 15px;
+
+    .video-js {
+        width: 100%;
+    }
+
+    .description {
+        font-size: 1.5em;
+        line-height: 1.5em;
+        margin-top: .5em;
+    }
+}
+
+.podcast-episode {
+    font-size: 1.5em;
+    line-height: 1.5em;
+
+    .video-js {
+        width: 100%;
+        margin-bottom: 1em;
+    }
+
+    h2, h3 {
+        a {
+            color: inherit;
+        }
+    }
+}
+
+
+&.episode {
+    .btn-download {
+        margin-top: 15px;
+    }
+}

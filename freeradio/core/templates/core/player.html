@@ -1,0 +1,103 @@
+{% load staticfiles thumbnail %}{% if request.is_ajax %}
+    <script>
+        {% if on_air_now %}
+            jQuery('.on-air-now').addClass('active');
+            jQuery('.now-title').text('{{ on_air_now|escapejs }}');
+            {% thumbnail on_air_now.logo '300x300' crop='center' as thumb %}jQuery('.vjs-poster').css({'background-image': 'url("{{ thumb.url|escapejs }}")'}).removeClass('vjs-hidden');{% empty %}jQuery('.vjs-poster').css({'background-image': 'url("{% static 'img/poster.png' %}")'}).removeClass('vjs-hidden');{% endthumbnail %}
+        {% else %}
+            jQuery('.on-air-now').removeClass('active');
+            jQuery('.now-title').text('');
+        {% endif %}
+
+        {% if on_air_next %}
+            jQuery('.on-air-next').addClass('active');
+            jQuery('.next-label').text('At {% spaceless %}
+            {% if on_air_next.date.hour == 12 and not on_air_next.minute %}
+                noon
+            {% elif not on_air_next.date.hour and not on_air_next.minute %}
+                midnight
+            {% elif on_air_next.date.minute %}
+                {{ on_air_next.date|time:'g:iA'|lower }}
+            {% else %}
+                {{ on_air_next.date|time:'gA'|lower }}
+            {% endif %}{% endspaceless %}');
+            jQuery('.next-title').text('{{ on_air_next.programme|escapejs }}');
+            {% if not on_air_now %}
+            {% thumbnail on_air_next.programme.logo '300x300' crop='center' as thumb %}jQuery('.vjs-poster').css({'background-image': 'url("{{ thumb.url|escapejs }}")'}).removeClass('vjs-hidden');{% empty %}jQuery('.vjs-poster').css({'background-image': 'url("{% static 'img/poster.png' %}")'}).removeClass('vjs-hidden');{% endthumbnail %}
+            {% endif %}
+        {% else %}
+            jQuery('.on-air-next').removeClass('active');
+            jQuery('.next-title').text('');
+            {% if not on_air_now %}
+            jQuery('.vjs-poster').css({'background-image': 'url("{% static 'img/poster.png' %}")'}).removeClass('vjs-hidden');
+            {% endif %}
+        {% endif %}
+    </script>
+{% else %}<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>{{ SITE.name }}</title>
+        <link rel="stylesheet" href="//vjs.zencdn.net/5.8.8/video-js.css">
+        <link rel="stylesheet" href="{% static 'css/main.css' %}">
+        <script src="{% static 'js/jquery.min.js' %}"></script>
+        <script src="{% static 'js/bootstrap.min.js' %}"></script>
+        <script src="//vjs.zencdn.net/5.8.8/video.js"></script>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body class="player">
+        <header>
+            <a href="//{{ request.get_host }}/" target="_blank"><img src="{% static 'img/logo.svg' %}" height="16" class="logo"></a>
+        </header>
+
+        <audio id="player" class="video-js" data-setup="{}" autoplay controls>
+            <source src="{{ RADIO_STREAM_URL }}" type="audio/mpeg"></source>
+        </audio>
+
+        <div id="social-links">
+            <iframe scrolling="no" frameborder="0" allowtransparency="true" class="twitter-share-button twitter-share-button-rendered twitter-tweet-button" title="Twitter Tweet Button" src="http://platform.twitter.com/widgets/tweet_button.751ed42d9510c4d9c29f599d8da83b0e.en.html#dnt=false&amp;id=twitter-widget-0&amp;lang=en&amp;original_referer=http%3A%2F%2F{{ request.get_host }}%2Fplayer%2F&amp;size=m&amp;text=Brum%20Radio%20-%20Listen%20Live&amp;time=1473788809029&amp;type=share&amp;url=http%3A%2F%2F{{ request.get_host }}%2Fplayer%2F" style="position: static; visibility: visible; width: 61px; height: 20px;"></iframe>
+            <iframe name="fad6f08139c26c" width="1000px" height="1000px" frameborder="0" allowtransparency="true" allowfullscreen="true" scrolling="no" title="fb:like Facebook Social Plugin" src="https://www.facebook.com/v2.3/plugins/like.php?action=like&amp;app_id=529328167204487&amp;channel=http%3A%2F%2Fstaticxx.facebook.com%2Fconnect%2Fxd_arbiter%2Fr%2FP5DLcu0KGJB.js%3Fversion%3D42%23cb%3Df20b406baa3d074%26domain%3D{{ request.get_host }}%26origin%3Dhttp%253A%252F%252F{{ request.get_host }}%252Ff27d7303ecf3d7%26relation%3Dparent.parent&amp;container_width=340&amp;href=http%3A%2F%2F{{ request.get_host }}%2F&amp;layout=button_count&amp;locale=en_GB&amp;sdk=joey&amp;share=false&amp;show_faces=false" style="border: none; visibility: visible; width: 75px; height: 20px;"></iframe>
+        </div>
+
+        <div id="meta">
+            <div class="now-playing">
+                <span class="pre">Now playing</span>
+                <span class="song"></span>
+            </div>
+
+            <dl class="on-air-now">
+                <dt class="now-label">On air now</dt>
+                <dd class="now-title"></dd>
+            </dl>
+
+            <dl class="on-air-next">
+                <dt class="next-label">Up next</dt>
+                <dd class="next-title"></dd>
+            </dl>
+        </div>
+
+        <script>window.RADIO_NOWPLAYING_URL = '{{ RADIO_NOWPLAYING_URL|escapejs }}';</script>
+        <script src="{% static 'js/freeradio.js' %}"></script>
+
+        <script>
+            jQuery(document).ready(
+                function($) {
+                    var poll = function() {
+                        $.ajax(
+                            {
+                                url: '{{ request.path }}',
+                                dataType: 'html',
+                                success: function(js) {
+                                    $('body').append($(js));
+                                }
+                            }
+                        );
+                    };
+
+                    poll();
+                    setInterval(poll, 60 * 1000);
+                }
+            );
+        </script>
+    </body>
+</html>{% endif %}
