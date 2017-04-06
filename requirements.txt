@@ -7,6 +7,7 @@ dj-database-url==0.4.2
 Django==1.11
 django-ckeditor==5.2.1
 django-constance==2.0.0
+django-environ==0.4.1
 django-markdown-deux==1.0.5
 django-picklefield==0.3.2
 django-redis-cache==1.7.1
