@@ -181,7 +181,7 @@ CACHES = {
     'default': {
         'BACKEND': 'redis_cache.RedisCache',
         'LOCATION': [
-            os.getenv('REDIS_URL', 'redis://localhost:6379/0')
+            os.getenv('REDIS_URL', 'redis://127.0.0.1:6379/')
         ],
         'OPTIONS': {
             'DB': 0,
@@ -410,6 +410,7 @@ ADVERTISEMENT_REGIONS = {
 }
 
 
+CONSTANCE_BACKEND = 'constance.backends.database.DatabaseBackend'
 CONSTANCE_CONFIG = {
     'OFFAIR_TEXT': (
         'Our local music mix',
