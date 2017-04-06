@@ -1,4 +1,3 @@
-from ckeditor.fields import RichTextField
 from datetime import timedelta
 from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
@@ -29,7 +28,7 @@ class Programme(models.Model):
     name = models.CharField(max_length=100, null=True, blank=True)
     slug = models.SlugField(max_length=30, unique=True)
     subtitle = models.CharField(max_length=200, null=True, blank=True)
-    description = RichTextField(null=True, blank=True)
+    description = models.TextField(null=True, blank=True)
     series = models.ForeignKey(
         Series,
         related_name='programmes',
@@ -468,7 +467,7 @@ class Update(models.Model):
     programme = models.ForeignKey(Programme, related_name='updates')
     date = models.DateTimeField()
     title = models.CharField(max_length=140, null=True, blank=True)
-    description = RichTextField(null=True, blank=True)
+    description = models.TextField(null=True, blank=True)
     author = models.ForeignKey(
         'auth.User',
         related_name='programme_updates',

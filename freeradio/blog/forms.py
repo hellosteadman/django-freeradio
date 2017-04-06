@@ -1,6 +1,14 @@
 from django import forms
 from django.utils import timezone
+from suit_redactor.widgets import RedactorWidget
 from .models import Post
+
+
+class BloggerForm(forms.ModelForm):
+    class Meta:
+        widgets = {
+            'biography': RedactorWidget
+        }
 
 
 class PostForm(forms.ModelForm):
