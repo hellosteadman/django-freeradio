@@ -14,7 +14,7 @@ setup(
     zip_safe=False,
     license='MIT',
     keywords='django radio',
-    entry_points = {
+    entry_points={
         'console_scripts': [
             'freeradio = freeradio.manage:main',
         ],
