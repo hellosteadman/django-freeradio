@@ -1,8 +1,10 @@
 boto==2.46.1
 click==6.7
+codecov==2.0.5
 Collectfast==0.5.2
 colorthief==0.2.1
 contextlib2==0.5.4
+coverage==4.3.4
 dj-database-url==0.4.2
 Django==1.11
 django-ckeditor==5.2.1
@@ -23,6 +25,7 @@ Pillow==4.1.0
 psycopg2==2.7.1
 py==1.4.33
 pytest==3.0.7
+pytest-cov==2.4.0
 pytest-django==3.1.2
 python-dateutil==2.6.0
 python-oembed==0.2.4
