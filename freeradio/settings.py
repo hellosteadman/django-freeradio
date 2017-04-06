@@ -1,7 +1,8 @@
+import environ
+import dj_database_url
+
 from django.core.urlresolvers import reverse
 from django.utils import six
-import os
-import dj_database_url
 
 if six.PY2:
     from urlparse import urlparse, urljoin
@@ -9,9 +10,12 @@ else:
     from urllib.parse import urlparse, urljoin
 
 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-SECRET_KEY = os.getenv('SECRET_KEY')
-DEBUG = os.getenv('DEBUG', 'True') in ('True', 'true', '1')
+env = environ.Env()
+env.read_env('.env')
+
+BASE_DIR = environ.Path(__file__) - 2
+SECRET_KEY = env('DJANGO_SECRET_KEY')
+DEBUG = env.bool('DJANGO_DEBUG', False)
 ALLOWED_HOSTS = ['*']
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -44,7 +48,7 @@ INSTALLED_APPS = [
 
 if not DEBUG:
     RAVEN_CONFIG = {
-        'dsn': os.getenv('SENTRY_DSN')
+        'dsn': env('SENTRY_DSN', default='')
     }
 
     INSTALLED_APPS += ('raven.contrib.django.raven_compat',)
@@ -61,13 +65,13 @@ MIDDLEWARE_CLASSES = [
 ]
 
 ROOT_URLCONF = 'freeradio.urls'
-SECURE_SSL_REDIRECT = os.getenv('SECURE_SSL_REDIRECT') == 'true'
+SECURE_SSL_REDIRECT = env.bool('SECURE_SSL_REDIRECT', False)
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            os.path.join(BASE_DIR, 'templates')
+            BASE_DIR.path('templates')
         ],
         'OPTIONS': {
             'context_processors': [
@@ -92,17 +96,17 @@ TEMPLATES = [
 WSGI_APPLICATION = 'freeradio.wsgi.application'
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'freeradio'
-    }
+    'default': env.db(
+        'DATABASE_URL',
+        default='sqlite:///%s' % BASE_DIR.path('freeradio.sqlite')
+    )
 }
 
 DATABASES['default'].update(
     dj_database_url.config(conn_max_age=500)
 )
 
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+# SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': (
@@ -142,7 +146,7 @@ if not DEBUG:
     DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
     STATICFILES_STORAGE = 'freeradio.core.storages.S3StaticStorage'
 
-REDIS_URL = os.getenv('REDIS_URL', 'redis://127.0.0.1:6379/')
+REDIS_URL = env('REDIS_URL', default='redis://127.0.0.1:6379/')
 REDIS_URL_PARTS = urlparse(REDIS_URL)
 
 RQ_QUEUES = {
@@ -151,25 +155,22 @@ RQ_QUEUES = {
     }
 }
 
-S3DIRECT_REGION = os.getenv('S3DIRECT_REGION', 'eu-west-1')
-AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
-AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
-AWS_STORAGE_BUCKET_NAME = os.getenv('AWS_S3_BUCKET')
-AWS_S3_CUSTOM_DOMAIN = os.getenv('AWS_S3_CUSTOM_DOMAIN') or (
-    's3-%s.amazonaws.com/%s' % (
-        S3DIRECT_REGION,
-        AWS_STORAGE_BUCKET_NAME
-    )
+S3DIRECT_REGION = 'eu-west-1'
+AWS_ACCESS_KEY_ID = env('AWS_ACCESS_KEY_ID', default='')
+AWS_SECRET_ACCESS_KEY = env('AWS_SECRET_ACCESS_KEY', default='')
+AWS_STORAGE_BUCKET_NAME = env('AWS_S3_BUCKET', default='')
+AWS_S3_CUSTOM_DOMAIN = env('AWS_S3_CUSTOM_DOMAIN', default='') or (
+    's3-eu-west-1.amazonaws.com/%s' % AWS_STORAGE_BUCKET_NAME
 )
 
 AWS_PRELOAD_METADATA = True
 AWS_QUERYSTRING_AUTH = False
 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+MEDIA_ROOT = BASE_DIR.path('media')
+STATIC_ROOT = BASE_DIR.path('staticfiles')
 MEDIA_URL = DEBUG and '/media/' or '//%s/uploads/' % AWS_S3_CUSTOM_DOMAIN
 STATIC_URL = DEBUG and '/static/' or ('//%s/static/' % AWS_S3_CUSTOM_DOMAIN)
-SITE_ID = os.getenv('SITE_ID')
+SITE_ID = env.int('SITE_ID', 1)
 
 S3DIRECT_DESTINATIONS = {
     'podcast_episodes': {
@@ -182,7 +183,7 @@ CACHES = {
     'default': {
         'BACKEND': 'redis_cache.RedisCache',
         'LOCATION': [
-            os.getenv('REDIS_URL', 'redis://127.0.0.1:6379/')
+            env('REDIS_URL', default='redis://127.0.0.1:6379')
         ],
         'OPTIONS': {
             'DB': 0,
@@ -392,23 +393,23 @@ CONSTANCE_CONFIG = {
         'Android app URL'
     ),
     'RADIO_STREAM_URL': (
-        os.getenv('RADIO_STREAM_URL', ''),
+        env('RADIO_STREAM_URL', default=''),
         'Shoutcast stream URL'
     ),
     'RADIO_NOWPLAYING_URL': (
-        os.getenv('RADIO_NOWPLAYING_URL', ''),
+        env('RADIO_NOWPLAYING_URL', default=''),
         'Now-playing XML URL'
     ),
     'GOOGLE_ANALYTICS_ID': (
-        os.getenv('GOOGLE_ANALYTICS_ID', ''),
+        env('GOOGLE_ANALYTICS_ID', default=''),
         'Google Analytics ID'
     ),
     'FACEBOOK_APP_ID': (
-        os.getenv('FACEBOOK_APP_ID', ''),
+        env('FACEBOOK_APP_ID', default=''),
         'Facebook app ID'
     ),
     'MIXCLOUD_USERNAME': (
-        os.getenv('MIXCLOUD_USERNAME', ''),
+        env('MIXCLOUD_USERNAME', default=''),
         'MixCloud username'
     )
 }
