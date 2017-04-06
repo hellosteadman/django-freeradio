@@ -420,19 +420,19 @@ CONSTANCE_CONFIG = {
         'What to display when there is no live show'
     ),
     'HOME_TITLE': (
-        '{{ HOME_TITLE }}',
+        'Welcome to Django Free Radio',
         'Homepage heading text'
     ),
     'HOME_INTRO': (
-        '{{ HOME_INTRO }}',
+        'You can change this content in the admin site',
         'Home intro text'
     ),
     'IOS_APP_URL': (
-        '{{ IOS_APP_URL }}',
+        '',
         'iOS app URL'
     ),
     'ANDROID_APP_URL': (
-        '{{ ANDROID_APP_URL }}',
+        '',
         'Android app URL'
     ),
     'RADIO_STREAM_URL': (
