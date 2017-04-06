@@ -10,9 +10,6 @@
         },
         {
             "plan": "heroku-redis"
-        },
-        {
-            "plan": "heroku-scheduler"
         }
     ],
     "env": {
@@ -21,10 +18,8 @@
             "generator": "secret"
         },
         "SENTRY_DSN": {
-            "description": "Sentry DSN URL"
-        },
-        "REDIS_URL": {
-            "description": "Redis URL"
+            "description": "Sentry DSN URL",
+            "value": ""
         },
         "AWS_ACCESS_KEY_ID": {
             "description": "AWS access key ID"
@@ -36,7 +31,8 @@
             "description": "AWS storage bucket name"
         },
         "S3DIRECT_REGION": {
-            "description": "AWS S3 region"
+            "description": "AWS S3 region",
+            "value": "eu-west-1"
         },
         "AWS_S3_CUSTOM_DOMAIN": {
             "description": "AWS S3 domain",
@@ -47,19 +43,16 @@
             "value": "1"
         },
         "RADIO_STREAM_URL": {
-            "description": "Shoutcast stream URL"
+            "description": "Shoutcast stream URL",
+            "value": "http://uk3.internet-radio.com:11168/stream"
         },
         "RADIO_NOWPLAYING_URL": {
-            "description": "Now-playing XML URL"
+            "description": "Now-playing XML URL",
+            "value": "https://control.internet-radio.com:2199/external/rpc.php?m=streaminfo.get&username=brumradio&charset=&mountpoint=&rid=brumradio"
         },
         "MIXCLOUD_USERNAME": {
-            "description": "MixCloud username"
-        },
-        "GOOGLE_ANALYTICS_ID": {
-            "description": "Google Analytics ID"
-        },
-        "FACEBOOK_APP_ID": {
-            "description": "Facebook app ID"
+            "description": "MixCloud username",
+            "value": "brumradio"
         }
     },
     "formation": {
