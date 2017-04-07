@@ -1,4 +1,5 @@
 from dateutil.parser import parse as parse_date
+from django_filepicker.models import FPFileField
 from django.db import models
 from django.template.defaultfilters import slugify
 from django.utils.safestring import mark_safe
@@ -13,8 +14,8 @@ class Series(models.Model):
     author = models.CharField(max_length=50)
     email = models.EmailField(max_length=255)
     public = models.BooleanField(default=True)
-    banner = models.ImageField(
-        upload_to='podcasts',
+    banner = FPFileField(
+        mimetypes=('image/*',),
         max_length=255
     )
 
@@ -25,8 +26,8 @@ class Series(models.Model):
 
     url = models.URLField(u'feed URL', max_length=255)
     description = models.TextField(null=True, blank=True)
-    artwork = models.ImageField(
-        max_length=255,
+    artwork = FPFileField(
+        mimetypes=('image/*',),
         upload_to='podcasts'
     )
 

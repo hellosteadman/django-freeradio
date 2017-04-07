@@ -1,3 +1,4 @@
+from django_filepicker.models import FPFileField
 from django.db import models
 from django.core.cache import cache
 from .helpers import upload_presenter_photo
@@ -15,9 +16,8 @@ class Presenter(models.Model):
         blank=True
     )
 
-    photo = models.ImageField(
-        upload_to='upload_presenter_photo',
-        max_length=255,
+    photo = FPFileField(
+        mimetypes=('image/*',),
         null=True,
         blank=True
     )

@@ -2,6 +2,7 @@ from django.db import models
 from django.utils.html import strip_tags
 from django.template.defaultfilters import truncatewords
 from taggit.managers import TaggableManager
+from django_filepicker.models import FPFileField
 from html2text import html2text
 from markdown2 import markdown
 
@@ -28,9 +29,8 @@ class Blogger(models.Model):
         blank=True
     )
 
-    photo = models.ImageField(
-        upload_to='blog',
-        max_length=255,
+    photo = FPFileField(
+        mimetypes=('image/*',),
         null=True,
         blank=True
     )
@@ -60,9 +60,8 @@ class Post(models.Model):
 
     created = models.DateTimeField(auto_now_add=True)
     published = models.DateTimeField(null=True, blank=True)
-    featured_image = models.ImageField(
-        max_length=255,
-        upload_to='blog',
+    featured_image = FPFileField(
+        mimetypes=('images/*',),
         null=True,
         blank=True
     )

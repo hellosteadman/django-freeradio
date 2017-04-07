@@ -1,4 +1,6 @@
 from django.contrib import admin
+from django_filepicker.models import FPFileField
+from django_filepicker.widgets import FPFileWidget
 from .models import *
 from .forms import *
 
@@ -6,6 +8,11 @@ from .forms import *
 @admin.register(Artist)
 class ArtistAdmin(admin.ModelAdmin):
     list_display = ('name',)
+    formfield_overrides = {
+        FPFileField: {
+            'widget': FPFileWidget
+        }
+    }
 
 
 @admin.register(Track)

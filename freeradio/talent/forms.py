@@ -1,3 +1,4 @@
+from django_filepicker.widgets import FPFileWidget
 from django import forms
 from suit_redactor.widgets import RedactorWidget
 
@@ -5,5 +6,6 @@ from suit_redactor.widgets import RedactorWidget
 class PresenterForm(forms.ModelForm):
     class Meta:
         widgets = {
-            'biography': RedactorWidget
+            'biography': RedactorWidget,
+            'photo': FPFileWidget
         }

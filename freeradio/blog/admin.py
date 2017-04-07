@@ -18,13 +18,6 @@ class CategoryAdmin(admin.ModelAdmin):
     }
 
 
-class PostForm(forms.ModelForm):
-    class Meta:
-        widgets = {
-            'body': RedactorWidget
-        }
-
-
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
     list_display = ('title', 'published')

@@ -1,4 +1,5 @@
 from datetime import timedelta
+from django_filepicker.models import FPFileField
 from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
 from django.core.cache import cache
@@ -99,16 +100,14 @@ class Programme(models.Model):
     )
 
     archived = models.BooleanField(default=False)
-    banner = models.ImageField(
-        upload_to='upload_programme_banner',
-        max_length=255,
+    banner = FPFileField(
+        mimetypes=('image/*',),
         null=True,
         blank=True
     )
 
-    logo = models.ImageField(
-        upload_to='upload_programme_logo',
-        max_length=255,
+    logo = FPFileField(
+        mimetypes=('images/*',),
         null=True,
         blank=True
     )

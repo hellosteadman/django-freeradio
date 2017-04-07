@@ -1,13 +1,15 @@
 from django import forms
 from django.utils import timezone
 from suit_redactor.widgets import RedactorWidget
+from django_filepicker.widgets import FPFileWidget
 from .models import Post
 
 
 class BloggerForm(forms.ModelForm):
     class Meta:
         widgets = {
-            'biography': RedactorWidget
+            'biography': RedactorWidget,
+            'photo': FPFileWidget
         }
 
 
@@ -33,3 +35,8 @@ class PostForm(forms.ModelForm):
             'categories',
             'tags'
         )
+
+        widgets = {
+            'body': RedactorWidget,
+            'featured_image': FPFileWidget
+        }
