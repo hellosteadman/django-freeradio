@@ -19,6 +19,7 @@ django-s3direct==0.4.9
 django-sass-processor==0.5.4
 django-storages==1.5.2
 django-suit==0.2.25
+django-suit-redactor==0.0.4
 django-taggit==0.22.0
 feedparser==5.2.1
 gunicorn==19.7.1
