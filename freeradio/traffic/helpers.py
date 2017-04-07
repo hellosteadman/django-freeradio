@@ -1,9 +1,9 @@
-from django.conf import settings
-from os import path
-from django.utils import timezone
+from constance import config
 from datetime import datetime, timedelta
 from dateutil.parser import parse as parse_date
+from django.utils import timezone
 from math import ceil
+from os import path
 import re
 import requests
 import calendar
@@ -333,7 +333,7 @@ def search_mixcloud_for_updates():
     from .models import MixcloudSearch
 
     url = 'https://api.mixcloud.com/search/?q=%s&type=cloudcast&limit=100' % (
-        settings.MIXCLOUD_USERNAME
+        config.MIXCLOUD_USERNAME
     )
 
     mixcloud_urls = []

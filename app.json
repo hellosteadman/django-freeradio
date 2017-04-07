@@ -21,22 +21,8 @@
             "description": "Django settings module",
             "value": "freeradio.settings"
         },
-        "AWS_ACCESS_KEY_ID": {
-            "description": "AWS access key ID"
-        },
-        "AWS_SECRET_ACCESS_KEY": {
-            "description": "AWS secret key"
-        },
-        "AWS_STORAGE_BUCKET_NAME": {
-            "description": "AWS storage bucket name"
-        },
-        "S3DIRECT_REGION": {
-            "description": "AWS S3 region",
-            "value": "eu-west-1"
-        },
-        "AWS_S3_CUSTOM_DOMAIN": {
-            "description": "AWS S3 domain",
-            "value": "s3-eu-west-1.amazonaws.com"
+        "FILEPICKER_API_KEY": {
+            "filepicker.io API key"
         },
         "SITE_ID": {
             "description": "Django Site ID",

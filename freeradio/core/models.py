@@ -1,12 +1,12 @@
 from django.db import models
+from django_filepicker.models import FPFileField
 
 
 class Feature(models.Model):
     title = models.CharField(max_length=100)
     subtitle = models.CharField(max_length=255, null=True, blank=True)
-    image = models.ImageField(
-        max_length=255,
-        upload_to='homepage/features',
+    image = FPFileField(
+        mimetypes=('image/*',),
         null=True,
         blank=True
     )

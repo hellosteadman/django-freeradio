@@ -1,6 +1,7 @@
 import environ
 import dj_database_url
 
+from django.core.exceptions import ImproperlyConfigured
 from django.core.urlresolvers import reverse
 from django.utils import six
 
@@ -8,7 +9,6 @@ if six.PY2:
     from urlparse import urlparse, urljoin
 else:
     from urllib.parse import urlparse, urljoin
-
 
 env = environ.Env()
 env.read_env('.env')
@@ -18,6 +18,8 @@ SECRET_KEY = env('DJANGO_SECRET_KEY')
 DEBUG = env.bool('DJANGO_DEBUG', False)
 ALLOWED_HOSTS = ['*']
 INSTALLED_APPS = [
+    'suit',
+    'suit_redactor',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -25,16 +27,13 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.sites',
     'django.contrib.staticfiles',
-    's3direct',
-    'storages',
     'sorl.thumbnail',
     'markdown_deux',
     'django_rq',
     'taggit',
-    'ckeditor',
-    'ckeditor_uploader',
     'constance',
     'constance.backends.database',
+    'sass_processor',
     'freeradio.core',
     'freeradio.advertising',
     'freeradio.talent',
@@ -55,6 +54,7 @@ if not DEBUG:
 
 MIDDLEWARE_CLASSES = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -139,12 +139,18 @@ USE_TZ = True
 
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
-    'django.contrib.staticfiles.finders.AppDirectoriesFinder'
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'sass_processor.finders.CssFinder'
 )
 
-if not DEBUG:
-    DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
-    STATICFILES_STORAGE = 'freeradio.core.storages.S3StaticStorage'
+STATICFILES_DIRS = [
+    BASE_DIR.path('freeradio/static/')()
+]
+
+FILEPICKER_API_KEY = env('FILEPICKER_API_KEY')
+MEDIA_ROOT = BASE_DIR.path('media')()
+STATIC_ROOT = BASE_DIR.path('staticfiles')()
+STATIC_URL = '/static/'
 
 REDIS_URL = env('REDIS_URL', default='redis://127.0.0.1:6379/')
 REDIS_URL_PARTS = urlparse(REDIS_URL)
@@ -155,30 +161,7 @@ RQ_QUEUES = {
     }
 }
 
-AWS_ACCESS_KEY_ID = env('AWS_ACCESS_KEY_ID', default='')
-AWS_SECRET_ACCESS_KEY = env('AWS_SECRET_ACCESS_KEY', default='')
-AWS_STORAGE_BUCKET_NAME = env('AWS_S3_BUCKET', default='')
-S3DIRECT_REGION = env('S3DIRECT_REGION', default='eu-west-1')
-AWS_S3_CUSTOM_DOMAIN = env('AWS_S3_CUSTOM_DOMAIN', default='') or (
-    's3-eu-west-1.amazonaws.com/%s' % AWS_STORAGE_BUCKET_NAME
-)
-
-AWS_PRELOAD_METADATA = True
-AWS_QUERYSTRING_AUTH = False
-
-MEDIA_ROOT = BASE_DIR.path('media')
-STATIC_ROOT = BASE_DIR.path('staticfiles')
-MEDIA_URL = DEBUG and '/media/' or '//%s/uploads/' % AWS_S3_CUSTOM_DOMAIN
-STATIC_URL = DEBUG and '/static/' or ('//%s/static/' % AWS_S3_CUSTOM_DOMAIN)
 SITE_ID = env.int('SITE_ID', 1)
-
-S3DIRECT_DESTINATIONS = {
-    'podcast_episodes': {
-        'key': 'podcasts',
-        'allowed': ['audio/mpeg', 'audio/mpeg3', 'audio/x-mpeg-3'],
-    }
-}
-
 CACHES = {
     'default': {
         'BACKEND': 'redis_cache.RedisCache',
@@ -270,72 +253,6 @@ NOTICEBOARD_MODELS = (
     )
 )
 
-CKEDITOR_UPLOAD_PATH = 'uploads'
-CKEDITOR_CONFIGS = {
-    'default': {
-        'skin': 'minimalist',
-        'toolbar_Basic': [
-            ['Source', '-', 'Bold', 'Italic']
-        ],
-        'toolbar_Advanced': [
-            {
-                'name': 'basicstyles',
-                'items': [
-                    'Format',
-                    'Bold',
-                    'Italic',
-                    'Subscript',
-                    'Superscript',
-                    '-',
-                    'RemoveFormat'
-                ]
-            },
-            {
-                'name': 'paragraph',
-                'items': [
-                    'NumberedList',
-                    'BulletedList',
-                    '-',
-                    'Outdent',
-                    'Indent',
-                    '-',
-                    'Blockquote'
-                ]
-            },
-            {
-                'name': 'links',
-                'items': [
-                    'Link',
-                    'Unlink',
-                    'Anchor'
-                ]
-            },
-            {
-                'name': 'insert',
-                'items': [
-                    'Image',
-                    'HorizontalRule',
-                    'Smiley',
-                    'SpecialChar',
-                ]
-            }
-        ],
-        'toolbar': 'Advanced',
-        'tabSpaces': 4,
-        'extraPlugins': ','.join(
-            [
-                'autogrow',
-                'widget',
-                'lineutils',
-                'clipboard',
-                'dialog',
-                'dialogui',
-                'elementspath'
-            ]
-        )
-    }
-}
-
 THUMBNAIL_DEBUG = DEBUG
 THUMBNAIL_KVSTORE = 'sorl.thumbnail.kvstores.redis_kvstore.KVStore'
 THUMBNAIL_REDIS_PASSWORD = REDIS_URL_PARTS.password
@@ -369,7 +286,6 @@ ADVERTISEMENT_REGIONS = {
     'sidebar': 'Sidebar'
 }
 
-
 CONSTANCE_BACKEND = 'constance.backends.database.DatabaseBackend'
 CONSTANCE_CONFIG = {
     'OFFAIR_TEXT': (
@@ -385,19 +301,25 @@ CONSTANCE_CONFIG = {
         'Home intro text'
     ),
     'IOS_APP_URL': (
-        '',
+        'https://itunes.apple.com/gb/app/brum-radio/id1218461799?mt=8',
         'iOS app URL'
     ),
     'ANDROID_APP_URL': (
-        '',
+        'https://play.google.com/store/apps/details?id=com.ionicframework.combrumradio701094',
         'Android app URL'
     ),
     'RADIO_STREAM_URL': (
-        env('RADIO_STREAM_URL', default=''),
+        env(
+            'RADIO_STREAM_URL',
+            default='http://uk3.internet-radio.com:11168/stream'
+        ),
         'Shoutcast stream URL'
     ),
     'RADIO_NOWPLAYING_URL': (
-        env('RADIO_NOWPLAYING_URL', default=''),
+        env(
+            'RADIO_NOWPLAYING_URL',
+            default='https://control.internet-radio.com:2199/external/rpc.php?m=streaminfo.get&username=brumradio&charset=&mountpoint=&rid=brumradio'
+        ),
         'Now-playing XML URL'
     ),
     'GOOGLE_ANALYTICS_ID': (
@@ -409,7 +331,14 @@ CONSTANCE_CONFIG = {
         'Facebook app ID'
     ),
     'MIXCLOUD_USERNAME': (
-        env('MIXCLOUD_USERNAME', default=''),
+        env('MIXCLOUD_USERNAME', default='brumradio'),
         'MixCloud username'
+    ),
+    'MAILCHIMP_FORM_URL': (
+        env(
+            'MAILCHIMP_FORM_URL',
+            default='//freeradio.us5.list-manage.com/subscribe/post?u=ff5d7e986a83ed1a1e1de6c27&amp;id=19d2b7f483'
+        ),
+        'MailChimp subscription form URL'
     )
 }

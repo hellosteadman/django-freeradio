@@ -1,19 +1,18 @@
-from ckeditor.fields import RichTextField
 from django.conf import settings
 from django.core.cache import cache
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django.utils.safestring import mark_safe
 from django.utils import timezone
+from django_filepicker.models import FPFileField
 from hashlib import md5
 from datetime import timedelta
 
 
 class Artist(models.Model):
     name = models.CharField(max_length=50)
-    photo = models.ImageField(
-        max_length=255,
-        upload_to='music',
+    photo = FPFileField(
+        mimetypes=('image/*',),
         null=True,
         blank=True
     )
@@ -30,14 +29,13 @@ class Artist(models.Model):
 class Track(models.Model):
     artist = models.ForeignKey(Artist, related_name='tracks')
     title = models.CharField(max_length=100)
-    artwork = models.ImageField(
-        max_length=255,
-        upload_to='music',
+    artwork = FPFileField(
+        mimetypes=('image/*',),
         null=True,
         blank=True
     )
 
-    notes = RichTextField(null=True, blank=True)
+    notes = models.TextField(null=True, blank=True)
     sample_url = models.URLField(
         u'sample URL',
         max_length=255,

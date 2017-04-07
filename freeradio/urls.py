@@ -1,9 +1,7 @@
 from django.conf import settings
 from django.conf.urls import url, include
 from django.contrib import admin
-from s3direct import urls as s3direct_urls
 from django_rq import urls as rq_urls
-from ckeditor_uploader import urls as ckeditor_uploader_urls
 from .core import urls as core_urls
 from .noticeboard import urls as noticeboard_urls
 from .traffic import urls as traffic_urls
@@ -16,8 +14,6 @@ from .music import urls as music_urls
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^django-rq/', include(rq_urls)),
-    url(r'^s3direct/', include(s3direct_urls)),
-    url(r'^ckeditor/', include(ckeditor_uploader_urls)),
     url(r'^', include(traffic_urls, namespace='traffic')),
     url(r'^', include(talent_urls, namespace='talent')),
     url(r'^', include(podcasting_urls, namespace='podcasting')),

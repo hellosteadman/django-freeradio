@@ -1,5 +1,5 @@
-from ckeditor.fields import RichTextField
 from datetime import timedelta
+from django_filepicker.models import FPFileField
 from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
 from django.core.cache import cache
@@ -18,7 +18,7 @@ class Series(models.Model):
     slug = models.SlugField(max_length=30, unique=True)
     subtitle = models.CharField(max_length=200, null=True, blank=True)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
     class Meta:
@@ -29,7 +29,7 @@ class Programme(models.Model):
     name = models.CharField(max_length=100, null=True, blank=True)
     slug = models.SlugField(max_length=30, unique=True)
     subtitle = models.CharField(max_length=200, null=True, blank=True)
-    description = RichTextField(null=True, blank=True)
+    description = models.TextField(null=True, blank=True)
     series = models.ForeignKey(
         Series,
         related_name='programmes',
@@ -100,23 +100,21 @@ class Programme(models.Model):
     )
 
     archived = models.BooleanField(default=False)
-    banner = models.ImageField(
-        upload_to='upload_programme_banner',
-        max_length=255,
+    banner = FPFileField(
+        mimetypes=('image/*',),
         null=True,
         blank=True
     )
 
-    logo = models.ImageField(
-        upload_to='upload_programme_logo',
-        max_length=255,
+    logo = FPFileField(
+        mimetypes=('images/*',),
         null=True,
         blank=True
     )
 
     objects = ProgrammeManager()
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name or self.get_presenters_display()
 
     @models.permalink
@@ -443,7 +441,7 @@ class ProgrammePresenter(models.Model):
 
     order = models.PositiveIntegerField(default=0)
 
-    def __unicode__(self):
+    def __str__(self):
         return u'%s - %s' % (self.programme.name, self.presenter.name)
 
     class Meta:
@@ -457,7 +455,7 @@ class ProgrammeHiatus(models.Model):
     date = models.DateField()
     notes = models.TextField(null=True, blank=True)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.date.strftime('%d/%m/%Y')
 
     class Meta:
@@ -468,7 +466,7 @@ class Update(models.Model):
     programme = models.ForeignKey(Programme, related_name='updates')
     date = models.DateTimeField()
     title = models.CharField(max_length=140, null=True, blank=True)
-    description = RichTextField(null=True, blank=True)
+    description = models.TextField(null=True, blank=True)
     author = models.ForeignKey(
         'auth.User',
         related_name='programme_updates',
@@ -489,7 +487,7 @@ class Update(models.Model):
         )
     )
 
-    def __unicode__(self):
+    def __str__(self):
         return self.title or self.date.strftime('%Y-%m-%d')
 
     def render_media(self):
@@ -520,7 +518,7 @@ class MixcloudSearch(models.Model):
 
     criteria = models.CharField(max_length=100)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.criteria
 
     class Meta:
@@ -540,7 +538,7 @@ class LookaheadItem(models.Model):
     programme = models.ForeignKey(Programme, related_name='lookaheads')
     details = models.TextField()
 
-    def __unicode__(self):
+    def __str__(self):
         return self.programme.name
 
     class Meta:

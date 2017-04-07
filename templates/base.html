@@ -1,10 +1,9 @@
-{% load staticfiles %}<!DOCTYPE html>
+{% load staticfiles sass_tags %}<!DOCTYPE html>
 <html>
     <head>
         <meta charset="utf-8">
         <title>{{ title_parts|join:' | ' }}{% if title_parts %} | {% endif %}{{ SITE.name }}</title>
-        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-        <link rel="stylesheet" href="{% static 'css/public.css' %}">
+        <link rel="stylesheet" href="{% sass_src 'sass/main.scss' %}">
         <script src="//code.jquery.com/jquery-2.2.4.min.js"></script>
         <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
         {% block head %}{% endblock %}
@@ -135,7 +134,7 @@
                 <div class="container">
                     <h2>Subscribe and stay in touch</h2>
                     <div id="mc_embed_signup">
-                        <form action="//freeradio.us5.list-manage.com/subscribe/post?u=ff5d7e986a83ed1a1e1de6c27&amp;id=19d2b7f483" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+                        <form action="{{ MAILCHIMP_FORM_URL }}" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
                             <div id="mc_embed_signup_scroll">
                                 <input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL" placeholder="Your email address" required>
                                 <div style="position: absolute; left: -5000px;" aria-hidden="true"><input type="text" name="b_0982045289b54c3687b1fe99f_59e2e9ec4a" tabindex="-1" value=""></div>

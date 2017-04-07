@@ -1,5 +1,7 @@
 from __future__ import absolute_import
 from django import forms
+from django_filepicker.widgets import FPFileWidget
+from suit_redactor.widgets import RedactorWidget
 from .models import Programme
 
 
@@ -64,3 +66,9 @@ class ProgrammeForm(forms.ModelForm):
             'banner',
             'logo'
         )
+
+        widgets = {
+            'description': RedactorWidget,
+            'banner': FPFileWidget,
+            'logo': FPFileWidget
+        }

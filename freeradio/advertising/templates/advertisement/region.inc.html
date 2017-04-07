@@ -4,7 +4,7 @@
             {{ ad.html|safe }}
         {% else %}
             {% if ad.url %}<a href="{{ ad.url }}" target="_blank">{% endif %}
-                {% if ad.image %}<img src="{{ ad.image.url }}" alt="{{ ad.name }}">{% else %}{{ ad.name }}{% endif %}
+                {% if ad.image %}<img src="{{ ad.image }}" alt="{{ ad.name }}">{% else %}{{ ad.name }}{% endif %}
             {% if ad.url %}</a>{% endif %}
         {% endif %}
     </div>

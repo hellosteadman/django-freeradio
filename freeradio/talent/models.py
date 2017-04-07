@@ -1,6 +1,6 @@
+from django_filepicker.models import FPFileField
 from django.db import models
 from django.core.cache import cache
-from ckeditor.fields import RichTextField
 from .helpers import upload_presenter_photo
 
 
@@ -16,14 +16,13 @@ class Presenter(models.Model):
         blank=True
     )
 
-    photo = models.ImageField(
-        upload_to='upload_presenter_photo',
-        max_length=255,
+    photo = FPFileField(
+        mimetypes=('image/*',),
         null=True,
         blank=True
     )
 
-    bio = RichTextField(null=True, blank=True)
+    biography = models.TextField(null=True, blank=True)
     alumnus = models.BooleanField(default=False)
     twitter_username = models.CharField(max_length=30, null=True, blank=True)
     facebook_username = models.CharField(max_length=50, null=True, blank=True)

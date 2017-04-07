@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django import forms
 from .models import *
 from .forms import *
 
@@ -6,6 +7,7 @@ from .forms import *
 @admin.register(Blogger)
 class BloggerAdmin(admin.ModelAdmin):
     list_displaly = ('name', 'user')
+    form = BloggerForm
 
 
 @admin.register(Category)

@@ -1,9 +1,8 @@
 from django.db import models
 from django.utils.html import strip_tags
 from django.template.defaultfilters import truncatewords
-from ckeditor.fields import RichTextField
-from ckeditor_uploader.fields import RichTextUploadingField
 from taggit.managers import TaggableManager
+from django_filepicker.models import FPFileField
 from html2text import html2text
 from markdown2 import markdown
 
@@ -22,7 +21,7 @@ class Category(models.Model):
 
 class Blogger(models.Model):
     name = models.CharField(max_length=100)
-    biography = RichTextField(null=True, blank=True)
+    biography = models.TextField(null=True, blank=True)
     user = models.OneToOneField(
         'auth.User',
         related_name='blogger_profile',
@@ -30,9 +29,8 @@ class Blogger(models.Model):
         blank=True
     )
 
-    photo = models.ImageField(
-        upload_to='blog',
-        max_length=255,
+    photo = FPFileField(
+        mimetypes=('image/*',),
         null=True,
         blank=True
     )
@@ -50,7 +48,7 @@ class Blogger(models.Model):
 class Post(models.Model):
     title = models.CharField(max_length=140)
     slug = models.SlugField(max_length=30, unique=True)
-    body = RichTextUploadingField()
+    body = models.TextField()
     excerpt = models.TextField(null=True, blank=True)
     author = models.ForeignKey('auth.User', related_name='user')
     blogger = models.ForeignKey(
@@ -62,9 +60,8 @@ class Post(models.Model):
 
     created = models.DateTimeField(auto_now_add=True)
     published = models.DateTimeField(null=True, blank=True)
-    featured_image = models.ImageField(
-        max_length=255,
-        upload_to='blog',
+    featured_image = FPFileField(
+        mimetypes=('images/*',),
         null=True,
         blank=True
     )

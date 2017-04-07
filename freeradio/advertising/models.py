@@ -1,15 +1,14 @@
 from django.db import models
+from django_filepicker.models import FPFileField
 from .settings import REGIONS
-from .helpers import upload_advert_image
 
 
 class Advert(models.Model):
     name = models.CharField(max_length=100)
-    image = models.ImageField(
-        max_length=255,
+    image = FPFileField(
+        mimetypes=('image/*',),
         null=True,
-        blank=True,
-        upload_to=upload_advert_image
+        blank=True
     )
 
     url = models.URLField(u'URL', max_length=255, null=True, blank=True)
