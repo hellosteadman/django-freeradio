@@ -4,27 +4,26 @@
 @import 'ui/jumbotron';
 
 body {
-    font-family: roboto, sans-serif;
     font-size: 12px;
 
     &.core {
-        @import 'ui/core';
+        @import 'sass/core';
     }
 
     &.blog {
-        @import 'ui/blog';
+        @import 'sass/blog';
     }
 
     &.traffic {
-        @import 'ui/traffic';
+        @import 'sass/traffic';
     }
 
     &.talent {
-        @import 'ui/talent';
+        @import 'sass/talent';
     }
 
     &.podcasting {
-        @import 'ui/podcasting';
+        @import 'sass/podcasting';
     }
 
     &.player {

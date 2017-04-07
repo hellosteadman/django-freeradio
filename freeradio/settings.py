@@ -10,7 +10,6 @@ if six.PY2:
 else:
     from urllib.parse import urlparse, urljoin
 
-
 env = environ.Env()
 env.read_env('.env')
 
@@ -36,6 +35,7 @@ INSTALLED_APPS = [
     'taggit',
     'constance',
     'constance.backends.database',
+    'sass_processor',
     'freeradio.core',
     'freeradio.advertising',
     'freeradio.talent',
@@ -139,8 +139,13 @@ USE_TZ = True
 
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
-    'django.contrib.staticfiles.finders.AppDirectoriesFinder'
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'sass_processor.finders.CssFinder'
 )
+
+STATICFILES_DIRS = [
+    BASE_DIR.path('freeradio/static/')()
+]
 
 if (
     env('DROPBOX_OAUTH2_TOKEN', default='') and
@@ -177,8 +182,8 @@ RQ_QUEUES = {
     }
 }
 
-MEDIA_ROOT = BASE_DIR.path('media')
-STATIC_ROOT = BASE_DIR.path('staticfiles')
+MEDIA_ROOT = BASE_DIR.path('media')()
+STATIC_ROOT = BASE_DIR.path('staticfiles')()
 MEDIA_URL = DEBUG and '/media/' or '//%s/uploads/' % AWS_S3_CUSTOM_DOMAIN
 STATIC_URL = DEBUG and '/static/' or ('//%s/static/' % AWS_S3_CUSTOM_DOMAIN)
 SITE_ID = env.int('SITE_ID', 1)
