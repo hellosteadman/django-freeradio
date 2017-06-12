@@ -95,7 +95,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'freeradio.wsgi.application'
 DATABASES = {
-    'default': env.db('DATABASE_URL'),
     'default': env.db(
         'DATABASE_URL',
         default='sqlite:///%s' % BASE_DIR.path('freeradio.sqlite')
